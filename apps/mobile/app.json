@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "Tonti",
+    "slug": "tonti",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "scheme": "tonti",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#0F766E",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "app.tonti.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0F766E"
+      },
+      "package": "app.tonti.mobile",
+      "usesCleartextTraffic": true
+    },
+    "plugins": ["expo-router", "expo-secure-store", "expo-splash-screen"]
+  }
+}

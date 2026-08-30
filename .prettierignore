@@ -1,0 +1,10 @@
+node_modules
+dist
+coverage
+.turbo
+.expo
+ios
+android
+pnpm-lock.yaml
+apps/api/prisma/migrations
+*.tsbuildinfo

@@ -1,0 +1,41 @@
+{
+  "name": "tonti",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Tonti — aplicativo brasileiro de gestão financeira pessoal",
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": ">=22.13.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:api": "pnpm --filter @tonti/api dev",
+    "dev:mobile": "pnpm --filter @tonti/mobile start",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "db:generate": "pnpm --filter @tonti/api prisma:generate",
+    "db:migrate": "pnpm --filter @tonti/api prisma:migrate",
+    "db:migrate:deploy": "pnpm --filter @tonti/api prisma:migrate:deploy",
+    "db:seed": "pnpm --filter @tonti/api prisma:seed",
+    "db:studio": "pnpm --filter @tonti/api prisma:studio",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.5",
+    "typescript": "^5.9.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
+}

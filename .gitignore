@@ -1,0 +1,55 @@
+# Dependencies
+node_modules
+
+# Build
+dist
+build
+.turbo
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.test
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Test
+coverage
+
+# Expo / React Native
+.expo
+.expo-shared
+ios
+android
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build
+
+# IDE
+.idea
+.vscode/*
+!.vscode/extensions.json
+*.swp
+.DS_Store
+Thumbs.db
+
+# OS
+Desktop.ini
+
+# Prisma
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+
+# Generated
+apps/api/generated

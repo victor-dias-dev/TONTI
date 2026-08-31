@@ -1,0 +1,18 @@
+export const queryKeys = {
+  dashboard: ['dashboard'] as const,
+  transactions: ['transactions'] as const,
+  transaction: (id: string) => ['transactions', id] as const,
+  relatedTransactions: (id: string) => ['transactions', id, 'related'] as const,
+  accounts: ['accounts'] as const,
+  account: (id: string) => ['accounts', id] as const,
+  accountTransactions: (id: string) => ['accounts', id, 'transactions'] as const,
+  accountActivity: (id: string) => ['accounts', id, 'activity'] as const,
+  cards: ['cards'] as const,
+  card: (id: string) => ['cards', id] as const,
+  invoice: (id: string) => ['invoices', id] as const,
+  invoiceByCard: (cardId: string) => ['invoices', 'card', cardId] as const,
+  categories: ['categories'] as const,
+  planning: ['planning'] as const,
+  categoryTransactions: (id: string) => ['categories', id, 'transactions'] as const,
+  profile: ['profile'] as const,
+};

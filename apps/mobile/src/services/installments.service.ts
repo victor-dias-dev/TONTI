@@ -1,12 +1,12 @@
 import type { InstallmentPlan } from '../domain';
-import { installmentPlans } from '../mocks/installments';
+import { financeApi } from '../api/finance';
 
 export const installmentsService = {
   getPlans(): Promise<InstallmentPlan[]> {
-    return Promise.resolve(installmentPlans);
+    return financeApi.getInstallments();
   },
 
-  getPlan(id: string): Promise<InstallmentPlan | undefined> {
-    return Promise.resolve(installmentPlans.find((plan) => plan.id === id));
+  getPlan(id: string): Promise<InstallmentPlan> {
+    return financeApi.getInstallment(id);
   },
 };

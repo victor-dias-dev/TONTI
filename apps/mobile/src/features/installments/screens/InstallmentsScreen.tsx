@@ -39,9 +39,13 @@ export function InstallmentsScreen() {
           {plans.length === 1 ? '1 compra ativa' : `${plans.length} compras ativas`}
         </AppText>
 
-        {plans.map((plan) => (
-          <InstallmentPlanCard key={plan.id} plan={plan} />
-        ))}
+        {plans.length === 0 && plansQuery.isFetched ? (
+          <AppText variant="caption" color={colors.muted}>
+            Nenhuma compra parcelada no momento.
+          </AppText>
+        ) : (
+          plans.map((plan) => <InstallmentPlanCard key={plan.id} plan={plan} />)
+        )}
       </ScrollView>
     </View>
   );

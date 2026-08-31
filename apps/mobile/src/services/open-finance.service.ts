@@ -1,12 +1,12 @@
 import type { ConnectBenefit, Institution } from '../domain';
-import { connectBenefits, institutions } from '../mocks/open-finance';
+import { financeApi } from '../api/finance';
 
 export const openFinanceService = {
   getBenefits(): Promise<ConnectBenefit[]> {
-    return Promise.resolve(connectBenefits);
+    return financeApi.getConnectBenefits();
   },
 
   getInstitutions(): Promise<Institution[]> {
-    return Promise.resolve(institutions);
+    return financeApi.getInstitutions();
   },
 };

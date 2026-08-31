@@ -1,12 +1,17 @@
 import type {
   Account,
   AccountActivityPoint,
+  AiConversation,
   Card,
   Category,
+  ConnectBenefit,
   Dashboard,
+  InstallmentPlan,
+  Institution,
   Invoice,
   PlanningSummary,
   Profile,
+  SubscriptionsSummary,
   Transaction,
 } from '../domain';
 import { apiClient } from './client';
@@ -82,6 +87,34 @@ export const financeApi = {
 
   getCategoryTransactions(categoryId: string) {
     return get<Transaction[]>('/transactions', { categoryId });
+  },
+
+  getAssistant() {
+    return get<AiConversation>('/assistant');
+  },
+
+  sendAssistantMessage(text: string) {
+    return post<AiConversation>('/assistant/messages', { text });
+  },
+
+  getSubscriptions() {
+    return get<SubscriptionsSummary>('/subscriptions');
+  },
+
+  getInstallments() {
+    return get<InstallmentPlan[]>('/installments');
+  },
+
+  getInstallment(id: string) {
+    return get<InstallmentPlan>(`/installments/${id}`);
+  },
+
+  getConnectBenefits() {
+    return get<ConnectBenefit[]>('/open-finance/benefits');
+  },
+
+  getInstitutions(q?: string) {
+    return get<Institution[]>('/open-finance/institutions', q ? { q } : undefined);
   },
 };
 

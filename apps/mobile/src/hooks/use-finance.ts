@@ -117,6 +117,8 @@ export function useCreateTransaction() {
       await queryClient.invalidateQueries({ queryKey: queryKeys.accounts });
       await queryClient.invalidateQueries({ queryKey: queryKeys.planning });
       await queryClient.invalidateQueries({ queryKey: queryKeys.cards });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.installments });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.assistant });
     },
   });
 }

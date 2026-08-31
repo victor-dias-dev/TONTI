@@ -84,9 +84,13 @@ export function SubscriptionsScreen() {
                 </Pressable>
               </View>
               <View style={styles.list}>
-                {data.items.map((item) => (
-                  <SubscriptionRow key={item.id} item={item} />
-                ))}
+                {data.items.length === 0 ? (
+                  <AppText variant="caption" color={colors.muted}>
+                    Nenhuma assinatura ativa.
+                  </AppText>
+                ) : (
+                  data.items.map((item) => <SubscriptionRow key={item.id} item={item} />)
+                )}
               </View>
             </View>
           </>

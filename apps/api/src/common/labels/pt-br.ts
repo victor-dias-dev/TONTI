@@ -69,6 +69,33 @@ export function formatPercentLabel(spent: bigint, planned: bigint): string {
   return `${(spent * 100n) / planned}%`;
 }
 
+export function fullMonthName(month: number): string {
+  return MONTHS[month - 1] ?? '';
+}
+
+export function occurredAtLabel(date: Date, timeZone: string): string {
+  const { day, month } = zonedCivilDate(date, timeZone);
+  const short = SHORT_MONTHS[month - 1] ?? '';
+  const monthText = `${short.charAt(0).toUpperCase()}${short.slice(1)}`;
+  const time = new Intl.DateTimeFormat('pt-BR', {
+    timeZone,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(date);
+  return `${day} de ${monthText}, ${time}`;
+}
+
+export function formatBrlFromCents(cents: string, compact = false): string {
+  const negative = cents.startsWith('-');
+  const digits = cents.replace(/\D/g, '') || '0';
+  const padded = digits.padStart(3, '0');
+  const whole = padded.slice(0, -2).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const fraction = padded.slice(-2);
+  const amount = compact && fraction === '00' ? whole : `${whole},${fraction}`;
+  return `${negative ? '- ' : ''}R$ ${amount}`;
+}
+
 export function formatVariationLabel(current: bigint, previous: bigint): string {
   if (previous === 0n) {
     return current === 0n ? '0%' : '+100%';

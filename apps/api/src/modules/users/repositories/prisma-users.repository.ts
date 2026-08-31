@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { User } from '@prisma/client';
+import { DEFAULT_CATEGORIES } from '../../../common/catalog/default-categories';
 import { PrismaService } from '../../../database/prisma.service';
 import { UsersRepository } from './users.repository';
 
@@ -28,6 +29,18 @@ export class PrismaUsersRepository extends UsersRepository {
   }
 
   create(data: { email: string; name: string; passwordHash: string }): Promise<User> {
-    return this.prisma.user.create({ data });
+    return this.prisma.user.create({
+      data: {
+        ...data,
+        categories: { create: DEFAULT_CATEGORIES },
+      },
+    });
+  }
+
+  update(id: string, data: { name?: string; avatarUrl?: string | null }): Promise<User> {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
   }
 }

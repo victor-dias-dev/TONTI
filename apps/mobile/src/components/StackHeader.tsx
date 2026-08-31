@@ -8,9 +8,10 @@ interface StackHeaderProps {
   title: string;
   onBack: () => void;
   close?: boolean;
+  onPressNotifications?: () => void;
 }
 
-export function StackHeader({ title, onBack, close }: StackHeaderProps) {
+export function StackHeader({ title, onBack, close, onPressNotifications }: StackHeaderProps) {
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
@@ -25,7 +26,18 @@ export function StackHeader({ title, onBack, close }: StackHeaderProps) {
       <AppText variant="titleSm" color={colors.primary}>
         {title}
       </AppText>
-      <View style={styles.back} />
+      {onPressNotifications ? (
+        <Pressable
+          onPress={onPressNotifications}
+          accessibilityRole="button"
+          accessibilityLabel="Notificações"
+          style={styles.bell}
+        >
+          <Icon name="bell" size={18} color={colors.primary} />
+        </Pressable>
+      ) : (
+        <View style={styles.back} />
+      )}
     </View>
   );
 }
@@ -44,6 +56,12 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: radius.pill,
     backgroundColor: colors.surfaceMuted,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bell: {
+    width: 40,
+    height: 40,
     alignItems: 'center',
     justifyContent: 'center',
   },

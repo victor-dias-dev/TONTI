@@ -23,6 +23,10 @@ export class UsersService {
     return this.usersRepository.create(data);
   }
 
+  update(id: string, data: { name?: string; avatarUrl?: string | null }): Promise<User> {
+    return this.usersRepository.update(id, data);
+  }
+
   toPublicUser(user: User): PublicUser {
     return {
       id: user.id,

@@ -424,6 +424,156 @@ export function Icon({ name, size = 20, color = colors.primary }: IconProps) {
           />
         </Svg>
       );
+    case 'robot':
+      return (
+        <Svg {...common}>
+          <Path d="M12 8V5M9 5h6" stroke={stroke} strokeWidth={1.7} strokeLinecap="round" />
+          <Rect x={6} y={8} width={12} height={10} rx={2.5} stroke={stroke} strokeWidth={1.7} />
+          <Circle cx={10} cy={12} r={1} fill={stroke} />
+          <Circle cx={14} cy={12} r={1} fill={stroke} />
+          <Path
+            d="M9 16h6M4 13h2M18 13h2"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinecap="round"
+          />
+        </Svg>
+      );
+    case 'savings':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M16 8.5c.8.6 1.4 1.5 1.7 2.5H20v3h-2.1c-.2 1.3-.8 2.4-1.7 3.3-.9.8-2.1 1.2-3.7 1.2-1.2 0-2.2-.2-3-.7H8.2L6 16.2V14c-1.2-.8-2-2-2-3.5C4 7.8 7.1 5 12 5c1.6 0 3 .4 4 1.1z"
+            stroke={stroke}
+            strokeWidth={1.6}
+            strokeLinejoin="round"
+          />
+          <Circle cx={15} cy={11.5} r={0.9} fill={stroke} />
+          <Path d="M9 19v2M15 19v2" stroke={stroke} strokeWidth={1.7} strokeLinecap="round" />
+        </Svg>
+      );
+    case 'mic':
+      return (
+        <Svg {...common}>
+          <Rect x={9} y={3.5} width={6} height={10} rx={3} stroke={stroke} strokeWidth={1.7} />
+          <Path
+            d="M7 12a5 5 0 0 0 10 0M12 17v3M9.5 20h5"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinecap="round"
+          />
+        </Svg>
+      );
+    case 'send':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M4 12 20 4l-6.5 16-1.8-6.2L4 12z"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinejoin="round"
+          />
+        </Svg>
+      );
+    case 'play':
+      return (
+        <Svg {...common}>
+          <Circle cx={12} cy={12} r={8} stroke={stroke} strokeWidth={1.7} />
+          <Path d="M10 9.2 16 12l-6 2.8V9.2z" fill={stroke} />
+        </Svg>
+      );
+    case 'music':
+      return (
+        <Svg {...common}>
+          <Path d="M10 18V7l9-2v11" stroke={stroke} strokeWidth={1.7} strokeLinejoin="round" />
+          <Circle cx={8} cy={18} r={2.2} stroke={stroke} strokeWidth={1.7} />
+          <Circle cx={17} cy={16} r={2.2} stroke={stroke} strokeWidth={1.7} />
+        </Svg>
+      );
+    case 'truck':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M3 16V8h11v8H3zM14 11h3.5L20 14v2h-6v-5z"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinejoin="round"
+          />
+          <Circle cx={7} cy={17.5} r={1.5} fill={stroke} />
+          <Circle cx={17} cy={17.5} r={1.5} fill={stroke} />
+        </Svg>
+      );
+    case 'sync':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M5.5 12a6.5 6.5 0 0 1 10.4-5.2L18 9"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinecap="round"
+          />
+          <Path d="M18 5.5V9h-3.5" stroke={stroke} strokeWidth={1.7} strokeLinecap="round" />
+          <Path
+            d="M18.5 12a6.5 6.5 0 0 1-10.4 5.2L6 15"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinecap="round"
+          />
+          <Path d="M6 18.5V15h3.5" stroke={stroke} strokeWidth={1.7} strokeLinecap="round" />
+        </Svg>
+      );
+    case 'sparkle':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M12 3.5 13.4 9 19 10.5 13.4 12 12 17.5 10.6 12 5 10.5 10.6 9z"
+            stroke={stroke}
+            strokeWidth={1.6}
+            strokeLinejoin="round"
+          />
+          <Path
+            d="M18 14.5 18.7 17 21 17.7 18.7 18.4 18 21l-.7-2.6L15 17.7l2.3-.7z"
+            fill={stroke}
+          />
+        </Svg>
+      );
+    case 'pieChart':
+      return (
+        <Svg {...common}>
+          <Circle cx={12} cy={12} r={8} stroke={stroke} strokeWidth={1.7} />
+          <Path d="M12 4v8h8" stroke={stroke} strokeWidth={1.7} strokeLinecap="round" />
+        </Svg>
+      );
+    case 'shield':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M12 3.5 19 7v5.2c0 4.3-2.9 7.2-7 8.3-4.1-1.1-7-4-7-8.3V7z"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinejoin="round"
+          />
+          <Rect x={9.5} y={11} width={5} height={4.5} rx={0.8} stroke={stroke} strokeWidth={1.5} />
+          <Path d="M10.5 11V9.8a1.5 1.5 0 0 1 3 0V11" stroke={stroke} strokeWidth={1.5} />
+        </Svg>
+      );
+    case 'link':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M10 13.5a3.8 3.8 0 0 0 5.4.2l1.8-1.8a3.8 3.8 0 1 0-5.4-5.4L10.7 8"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinecap="round"
+          />
+          <Path
+            d="M14 10.5a3.8 3.8 0 0 0-5.4-.2L6.8 12.1a3.8 3.8 0 1 0 5.4 5.4L13.3 16"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinecap="round"
+          />
+        </Svg>
+      );
     default:
       return (
         <Svg {...common}>

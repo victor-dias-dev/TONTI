@@ -12,12 +12,13 @@ import {
 } from '../../../utils/lookups';
 
 export function TransactionsScreen() {
-  const transactions = useTransactions();
-  const categories = useCategories();
-  const accounts = useAccounts();
   const [query, setQuery] = useState('');
   const [filterOpen, setFilterOpen] = useState(false);
   const [cursor, setCursor] = useState({ year: 2026, month: 7 });
+  const month = `${cursor.year}-${String(cursor.month + 1).padStart(2, '0')}`;
+  const transactions = useTransactions({ month });
+  const categories = useCategories();
+  const accounts = useAccounts();
 
   const filtered = useMemo(() => {
     const items = transactions.data ?? [];

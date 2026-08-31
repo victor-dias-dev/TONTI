@@ -15,4 +15,10 @@ export const queryKeys = {
   planning: ['planning'] as const,
   categoryTransactions: (id: string) => ['categories', id, 'transactions'] as const,
   profile: ['profile'] as const,
+  assistant: ['assistant'] as const,
+  subscriptions: ['subscriptions'] as const,
+  connectBenefits: ['open-finance', 'benefits'] as const,
+  institutions: ['open-finance', 'institutions'] as const,
+  installments: ['installments'] as const,
+  installment: (id: string) => ['installments', id] as const,
 };

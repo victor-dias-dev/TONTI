@@ -5,4 +5,5 @@ export abstract class UsersRepository {
   abstract findByEmail(email: string): Promise<User | null>;
   abstract findByEmailIncludingDeleted(email: string): Promise<User | null>;
   abstract create(data: { email: string; name: string; passwordHash: string }): Promise<User>;
+  abstract update(id: string, data: { name?: string; avatarUrl?: string | null }): Promise<User>;
 }

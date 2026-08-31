@@ -68,7 +68,7 @@ pnpm db:migrate:deploy    # aplica migrations existentes
 pnpm db:studio            # Prisma Studio
 ```
 
-IDs de usuário são UUID. Timestamps são UTC (`TIMESTAMPTZ`). Valores financeiros futuros usam `DECIMAL` — ver `docs/money-and-dates.md`.
+IDs são UUID. Timestamps são UTC (`TIMESTAMPTZ`). Valores financeiros usam `DECIMAL(19, 4)` — ver `docs/money-and-dates.md`. Tabelas e relacionamentos: `docs/database.md`.
 
 ## Development
 
@@ -110,7 +110,7 @@ packages/tsconfig TypeScript compartilhado
 packages/eslint-config
 ```
 
-Detalhes em `docs/architecture.md`. Isolamento de dados: todo dado financeiro futuro pertence a um usuário e nunca pode ser acessado por outro.
+Detalhes em `docs/architecture.md`. Isolamento de dados: todo dado financeiro pertence a um usuário e nunca pode ser acessado por outro. Schema das tabelas: `docs/database.md`. Design system do mobile: `docs/design-system.md`.
 
 Mobile:
 

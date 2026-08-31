@@ -1,6 +1,8 @@
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import type { IconName } from '../domain';
 import { colors, radius, shadows, typography } from '../theme';
 import { AppText } from './AppText';
+import { Icon } from './Icon';
 
 interface PrimaryButtonProps {
   label: string;
@@ -8,6 +10,7 @@ interface PrimaryButtonProps {
   loading?: boolean;
   disabled?: boolean;
   accessibilityLabel?: string;
+  icon?: IconName;
 }
 
 export function PrimaryButton({
@@ -16,6 +19,7 @@ export function PrimaryButton({
   loading,
   disabled,
   accessibilityLabel,
+  icon,
 }: PrimaryButtonProps) {
   const isDisabled = disabled || loading;
   return (
@@ -34,7 +38,8 @@ export function PrimaryButton({
       {loading ? (
         <ActivityIndicator color={colors.onPrimary} />
       ) : (
-        <View>
+        <View style={styles.content}>
+          {icon ? <Icon name={icon} size={20} color={colors.onPrimary} /> : null}
           <AppText variant="label" color={colors.onPrimary} style={styles.label}>
             {label}
           </AppText>
@@ -53,6 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
+  content: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   label: {
     ...typography.bodySemi,
     color: colors.onPrimary,

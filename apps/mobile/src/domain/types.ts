@@ -43,7 +43,19 @@ export type IconName =
   | 'edit'
   | 'calendar'
   | 'repeat'
-  | 'installments';
+  | 'installments'
+  | 'robot'
+  | 'savings'
+  | 'mic'
+  | 'send'
+  | 'play'
+  | 'music'
+  | 'truck'
+  | 'sync'
+  | 'sparkle'
+  | 'pieChart'
+  | 'shield'
+  | 'link';
 
 export interface Category {
   id: string;
@@ -148,4 +160,92 @@ export interface Profile {
   id: string;
   name: string;
   email: string;
+}
+
+export type AiRole = 'assistant' | 'user';
+export type AiInsightTone = 'income' | 'danger' | 'primary';
+
+export interface AiInsight {
+  id: string;
+  icon: IconName;
+  tone: AiInsightTone;
+  text: string;
+  amountCents?: MoneyCents;
+}
+
+export interface AiMessage {
+  id: string;
+  role: AiRole;
+  text: string;
+  insights?: AiInsight[];
+}
+
+export interface AiConversation {
+  title: string;
+  subtitle: string;
+  suggestions: string[];
+  messages: AiMessage[];
+}
+
+export type SubscriptionTone = 'danger' | 'soft' | 'muted';
+
+export interface Subscription {
+  id: string;
+  name: string;
+  amountCents: MoneyCents;
+  nextDay: number;
+  icon: IconName;
+  tone: SubscriptionTone;
+}
+
+export interface SubscriptionsSummary {
+  insightYearlyCents: MoneyCents;
+  monthlyCents: MoneyCents;
+  yearlyCents: MoneyCents;
+  items: Subscription[];
+}
+
+export type InstitutionShape = 'circle' | 'rounded';
+
+export interface Institution {
+  id: string;
+  name: string;
+  initial: string;
+  brandColor: string;
+  textColor: string;
+  shape: InstitutionShape;
+  featured: boolean;
+}
+
+export interface ConnectBenefit {
+  id: string;
+  title: string;
+  description: string;
+  icon: IconName;
+}
+
+export type InstallmentStatus = 'paid' | 'next' | 'upcoming';
+
+export interface Installment {
+  id: string;
+  index: number;
+  monthLabel: string;
+  status: InstallmentStatus;
+  amountCents: MoneyCents;
+  caption: string;
+  trailingCaption: string;
+}
+
+export interface InstallmentPlan {
+  id: string;
+  merchant: string;
+  occurredAtLabel: string;
+  icon: IconName;
+  totalCents: MoneyCents;
+  installmentCents: MoneyCents;
+  installmentCount: number;
+  paidCount: number;
+  remainingCount: number;
+  remainingCents: MoneyCents;
+  installments: Installment[];
 }

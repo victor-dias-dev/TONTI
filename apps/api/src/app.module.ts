@@ -7,6 +7,13 @@ import { randomUUID } from 'node:crypto';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { AccountsModule } from './modules/accounts/accounts.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
+import { BudgetsModule } from './modules/budgets/budgets.module';
+import { CreditCardsModule } from './modules/credit-cards/credit-cards.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { ProfileModule } from './modules/profile/profile.module';
 import { HealthModule } from './health/health.module';
 import { DatabaseModule } from './database/database.module';
 import { RedisModule } from './redis/redis.module';
@@ -74,6 +81,13 @@ import { validateEnv } from './config/env.validation';
     RedisModule,
     UsersModule,
     AuthModule,
+    CategoriesModule,
+    AccountsModule,
+    TransactionsModule,
+    BudgetsModule,
+    CreditCardsModule,
+    DashboardModule,
+    ProfileModule,
     HealthModule,
   ],
   providers: [

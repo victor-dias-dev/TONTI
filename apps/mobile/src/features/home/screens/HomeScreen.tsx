@@ -56,7 +56,13 @@ export function HomeScreen() {
               <StatTile label="Saídas" cents={data.expenseCents} icon="arrowUp" />
               <StatTile label="Disponível" cents={data.availableCents} icon="wallet" emphasized />
             </View>
-            <InsightBanner text={data.insight.text} />
+            <Pressable
+              onPress={() => router.push('/assistant')}
+              accessibilityRole="button"
+              accessibilityLabel="Abrir Tonti AI"
+            >
+              <InsightBanner text={data.insight.text} />
+            </Pressable>
             <Card padding={20}>
               <View style={styles.spentHead}>
                 <AppText variant="titleSm" color={colors.primary}>

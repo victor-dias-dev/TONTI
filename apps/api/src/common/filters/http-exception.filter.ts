@@ -79,6 +79,16 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       };
     }
 
+    if (exception instanceof Prisma.PrismaClientKnownRequestError && exception.code === 'P2025') {
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        code: ErrorCode.NOT_FOUND,
+        message: 'Resource not found',
+        timestamp,
+        path,
+      };
+    }
+
     return {
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       code: ErrorCode.INTERNAL_ERROR,
@@ -104,6 +114,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         return ErrorCode.NOT_FOUND;
       case HttpStatus.CONFLICT:
         return ErrorCode.CONFLICT;
+      case HttpStatus.UNPROCESSABLE_ENTITY:
+        return ErrorCode.BUSINESS_RULE;
       case HttpStatus.TOO_MANY_REQUESTS:
         return ErrorCode.TOO_MANY_REQUESTS;
       default:

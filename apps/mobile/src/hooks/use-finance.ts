@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Transaction } from '../domain';
+import type { TransactionListParams } from '../api/finance';
 import { financeService } from '../services/finance.service';
 import { queryKeys } from '../services/query-keys';
 
@@ -7,8 +8,11 @@ export function useDashboard() {
   return useQuery({ queryKey: queryKeys.dashboard, queryFn: financeService.getDashboard });
 }
 
-export function useTransactions() {
-  return useQuery({ queryKey: queryKeys.transactions, queryFn: financeService.getTransactions });
+export function useTransactions(params?: TransactionListParams) {
+  return useQuery({
+    queryKey: [...queryKeys.transactions, params] as const,
+    queryFn: () => financeService.getTransactions(params),
+  });
 }
 
 export function useTransaction(id: string) {
@@ -110,6 +114,9 @@ export function useCreateTransaction() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: queryKeys.transactions });
       await queryClient.invalidateQueries({ queryKey: queryKeys.dashboard });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.accounts });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.planning });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.cards });
     },
   });
 }

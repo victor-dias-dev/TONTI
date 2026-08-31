@@ -45,7 +45,7 @@ Do not put business rules in controllers. Persist through repositories, not Pris
 
 ## Data isolation
 
-A user owns their data. Every future financial entity must have a clear owner (`userId` or equivalent). The API must never return another user's records.
+A user owns their data. Every financial entity has a clear owner (`user_id`). The API must never return another user's records.
 
 ```
 User A → Financial Data A
@@ -53,6 +53,8 @@ User B → Financial Data B
 ```
 
 This is not multi-tenant B2B. Household / shared accounts may appear later; do not encode that model now, and do not block it.
+
+Table layout, enums, and foreign keys: `docs/database.md`.
 
 ## Auth
 
@@ -65,6 +67,8 @@ UI → Hooks → State / Query → API Client → Backend
 ```
 
 Zustand holds session and local preferences. TanStack Query holds server state. The JWT lives in `expo-secure-store`, not AsyncStorage.
+
+Product UI tokens and components: `docs/design-system.md`. Login/register still use the legacy theme in `apps/mobile/src/constants/theme.ts`.
 
 ## Redis
 

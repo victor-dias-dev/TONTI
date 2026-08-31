@@ -54,6 +54,17 @@ export function MoreScreen() {
             icon="card"
             onPress={() => router.push('/(app)/accounts/cards')}
           />
+          <SettingsRow label="Tonti AI" icon="robot" onPress={() => router.push('/assistant')} />
+          <SettingsRow
+            label="Assinaturas"
+            icon="subscription"
+            onPress={() => router.push('/(app)/planning/subscriptions')}
+          />
+          <SettingsRow
+            label="Compras parceladas"
+            icon="installments"
+            onPress={() => router.push('/installment')}
+          />
           {futureRows.slice(2).map((row) => (
             <SettingsRow
               key={row.label}

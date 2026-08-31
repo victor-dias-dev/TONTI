@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { AccountCard, AppHeader, AppText, GhostButton, Icon, MoneyText } from '../../../components';
 import { useAccounts, useCards } from '../../../hooks/use-finance';
 import { colors, radius, shadows } from '../../../theme';
@@ -26,12 +26,7 @@ export function AccountsScreen() {
           ))}
         </View>
 
-        <GhostButton
-          label="Adicionar Conta"
-          onPress={() =>
-            Alert.alert('Em breve', 'O cadastro de contas estará disponível em uma próxima etapa.')
-          }
-        />
+        <GhostButton label="Adicionar Conta" onPress={() => router.push('/connect-account')} />
 
         <View>
           <AppText variant="titleSm" color={colors.primary} style={styles.section}>

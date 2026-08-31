@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
 import {
@@ -37,8 +37,8 @@ export function NewTransactionScreen() {
       type: 'expense',
       amountCents: '0',
       description: '',
-      categoryId: 'category-food',
-      accountId: 'account-nubank',
+      categoryId: '',
+      accountId: '',
       occurredAt: '2026-08-30',
       notes: '',
       repeat: false,
@@ -53,6 +53,19 @@ export function NewTransactionScreen() {
   const occurredAt = useWatch({ control: form.control, name: 'occurredAt' });
   const repeat = useWatch({ control: form.control, name: 'repeat' });
   const installments = useWatch({ control: form.control, name: 'installments' });
+
+  useEffect(() => {
+    const currentCategory = form.getValues('categoryId');
+    const currentAccount = form.getValues('accountId');
+    const firstCategory = categories.data?.[0]?.id;
+    const firstAccount = accounts.data?.[0]?.id;
+    if (!currentCategory && firstCategory) {
+      form.setValue('categoryId', firstCategory);
+    }
+    if (!currentAccount && firstAccount) {
+      form.setValue('accountId', firstAccount);
+    }
+  }, [accounts.data, categories.data, form]);
 
   const onSubmit = form.handleSubmit((values) => {
     create.mutate(

@@ -1,23 +1,35 @@
 import { PrismaClient } from '@prisma/client';
 import * as argon2 from 'argon2';
+import { DEFAULT_CATEGORIES } from '../src/common/catalog/default-categories';
 
 const prisma = new PrismaClient();
 
 async function main() {
   const email = 'demo@tonti.app';
-  const existing = await prisma.user.findUnique({ where: { email } });
+  const passwordHash = await argon2.hash('Demo1234!');
 
-  if (existing) {
-    return;
-  }
-
-  await prisma.user.create({
-    data: {
+  const user = await prisma.user.upsert({
+    where: { email },
+    update: { name: 'Victor', passwordHash, deletedAt: null },
+    create: {
       email,
-      name: 'Demo',
-      passwordHash: await argon2.hash('Demo1234!'),
+      name: 'Victor',
+      passwordHash,
+      categories: { create: DEFAULT_CATEGORIES },
     },
   });
+
+  const categoryCount = await prisma.category.count({ where: { userId: user.id } });
+  if (categoryCount === 0) {
+    await prisma.category.createMany({
+      data: DEFAULT_CATEGORIES.map((category) => ({ ...category, userId: user.id })),
+    });
+  }
+
+  await prisma.transaction.deleteMany({ where: { userId: user.id } });
+  await prisma.budget.deleteMany({ where: { userId: user.id } });
+  await prisma.subscription.deleteMany({ where: { userId: user.id } });
+  await prisma.account.deleteMany({ where: { userId: user.id } });
 }
 
 main()

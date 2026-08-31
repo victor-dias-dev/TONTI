@@ -7,6 +7,7 @@ import {
   CategoryBudgetRow,
   GhostButton,
   MoneyText,
+  SettingsRow,
 } from '../../../components';
 import { useCategories, usePlanning } from '../../../hooks/use-finance';
 import { colors } from '../../../theme';
@@ -24,6 +25,15 @@ export function PlanningScreen() {
         <AppText variant="titleLg" color={colors.primary}>
           Planejamento
         </AppText>
+
+        <Card padding={0}>
+          <SettingsRow
+            label="Assinaturas"
+            icon="subscription"
+            caption="Gerencie pagamentos recorrentes"
+            onPress={() => router.push('/(app)/planning/subscriptions')}
+          />
+        </Card>
 
         {data ? (
           <>

@@ -17,8 +17,9 @@ export const queryKeys = {
   profile: ['profile'] as const,
   assistant: ['assistant'] as const,
   subscriptions: ['subscriptions'] as const,
-  connectBenefits: ['open-finance', 'benefits'] as const,
-  institutions: ['open-finance', 'institutions'] as const,
   installments: ['installments'] as const,
   installment: (id: string) => ['installments', id] as const,
+  notifications: ['notifications'] as const,
+  preferences: ['preferences'] as const,
+  help: ['help'] as const,
 };

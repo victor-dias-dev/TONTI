@@ -1,7 +1,11 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { CategoryType, TransactionType } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
-import { fromZonedCivil, monthRange, zonedCivilDate } from '../../../common/dates/zoned-time';
+import {
+  fromZonedCivil,
+  financialMonthRange,
+  zonedCivilDate,
+} from '../../../common/dates/zoned-time';
 import { AppException } from '../../../common/errors/app.exception';
 import { ErrorCode } from '../../../common/errors/error-codes';
 import { formatPercentLabel } from '../../../common/labels/pt-br';
@@ -66,7 +70,11 @@ export class BudgetsService {
     const user = await this.usersService.findById(userId);
     const timeZone = user?.timezone ?? 'America/Sao_Paulo';
     const civil = zonedCivilDate(budget.month, 'UTC');
-    const range = monthRange(fromZonedCivil(civil.year, civil.month, 15, timeZone), timeZone);
+    const range = financialMonthRange(
+      fromZonedCivil(civil.year, civil.month, 15, timeZone),
+      timeZone,
+      user?.periodStartDay ?? 1,
+    );
     const spentRows = await this.transactionsRepository.sumExpensesByCategory(
       userId,
       range.start,
@@ -182,7 +190,10 @@ export class BudgetsService {
       : new Date();
     const civil = zonedCivilDate(reference, timeZone);
     const monthStart = new Date(Date.UTC(civil.year, civil.month - 1, 1));
-    return { monthStart, range: monthRange(reference, timeZone) };
+    return {
+      monthStart,
+      range: financialMonthRange(reference, timeZone, user?.periodStartDay ?? 1),
+    };
   }
 }
 

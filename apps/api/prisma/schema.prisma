@@ -50,6 +50,14 @@ enum GoalStatus {
   @@map("goal_status")
 }
 
+enum ThemePreference {
+  SYSTEM
+  LIGHT
+  DARK
+
+  @@map("theme_preference")
+}
+
 enum SubscriptionFrequency {
   WEEKLY
   MONTHLY
@@ -68,17 +76,27 @@ enum SubscriptionStatus {
 }
 
 model User {
-  id           String    @id @default(uuid()) @db.Uuid
-  name         String
-  email        String    @unique
-  passwordHash String    @map("password_hash")
-  avatarUrl    String?   @map("avatar_url")
-  currency     String    @default("BRL") @db.Char(3)
-  locale       String    @default("pt-BR")
-  timezone     String    @default("America/Sao_Paulo")
-  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz(3)
+  id                   String          @id @default(uuid()) @db.Uuid
+  name                 String
+  email                String          @unique
+  passwordHash         String          @map("password_hash")
+  avatarUrl            String?         @map("avatar_url")
+  currency             String          @default("BRL") @db.Char(3)
+  locale               String          @default("pt-BR")
+  timezone             String          @default("America/Sao_Paulo")
+  theme                ThemePreference @default(SYSTEM)
+  hideBalances         Boolean         @default(false) @map("hide_balances")
+  periodStartDay       Int             @default(1) @map("period_start_day")
+  notificationsEnabled Boolean         @default(true) @map("notifications_enabled")
+  notifyBills          Boolean         @default(true) @map("notify_bills")
+  notifyInvoices       Boolean         @default(true) @map("notify_invoices")
+  notifyBudgets        Boolean         @default(false) @map("notify_budgets")
+  notifyUnusual        Boolean         @default(true) @map("notify_unusual")
+  notifyGoals          Boolean         @default(false) @map("notify_goals")
+  notifyLowBalance     Boolean         @default(true) @map("notify_low_balance")
+  createdAt            DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt            DateTime?       @map("deleted_at") @db.Timestamptz(3)
 
   accounts      Account[]
   transactions  Transaction[]

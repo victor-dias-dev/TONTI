@@ -66,7 +66,7 @@ JWT access tokens. Password hashes with Argon2. Soft-deleted users cannot authen
 UI → Hooks → State / Query → API Client → Backend
 ```
 
-Zustand holds session and local preferences. TanStack Query holds server state. The JWT lives in `expo-secure-store`, not AsyncStorage.
+Zustand holds session. TanStack Query holds server state (dashboard, profile, preferences, categories). The JWT lives in `expo-secure-store`, not AsyncStorage.
 
 Product UI tokens and components: `docs/design-system.md`. Login/register still use the legacy theme in `apps/mobile/src/constants/theme.ts`.
 

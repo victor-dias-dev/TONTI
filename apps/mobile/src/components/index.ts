@@ -1,3 +1,4 @@
+export { AmountKeypad } from './AmountKeypad';
 export { AccountCard } from './AccountCard';
 export { AppHeader } from './AppHeader';
 export { AppText } from './AppText';

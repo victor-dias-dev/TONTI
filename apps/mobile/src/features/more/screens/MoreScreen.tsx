@@ -1,32 +1,22 @@
 import { router } from 'expo-router';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { AppHeader, AppText, Card, SettingsRow } from '../../../components';
-import type { IconName } from '../../../domain';
 import { useProfile } from '../../../hooks/use-finance';
 import { useSession } from '../../../hooks/use-session';
-import { colors, radius } from '../../../theme';
-
-const futureRows: { label: string; icon: IconName }[] = [
-  { label: 'Perfil', icon: 'user' },
-  { label: 'Categorias', icon: 'grid' },
-  { label: 'Preferências', icon: 'settings' },
-  { label: 'Notificações', icon: 'bell' },
-  { label: 'Segurança', icon: 'lock' },
-  { label: 'Assinatura', icon: 'crown' },
-  { label: 'Ajuda', icon: 'help' },
-];
+import { radius, useColors } from '../../../theme';
 
 export function MoreScreen() {
+  const colors = useColors();
   const profile = useProfile();
   const { logout, user } = useSession();
   const name = profile.data?.name ?? user?.name ?? 'Victor';
 
   return (
-    <View style={styles.safe}>
+    <View style={[styles.safe, { backgroundColor: colors.background }]}>
       <AppHeader />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.profile}>
-          <View style={styles.avatar}>
+          <View style={[styles.avatar, { backgroundColor: colors.primarySoft }]}>
             <AppText variant="titleMd" color={colors.primary}>
               {name.slice(0, 1)}
             </AppText>
@@ -40,14 +30,8 @@ export function MoreScreen() {
         </View>
 
         <Card padding={0}>
-          {futureRows.slice(0, 2).map((row) => (
-            <SettingsRow
-              key={row.label}
-              label={row.label}
-              icon={row.icon}
-              onPress={() => undefined}
-            />
-          ))}
+          <SettingsRow label="Perfil" icon="user" onPress={() => router.push('/profile')} />
+          <SettingsRow label="Categorias" icon="grid" onPress={() => router.push('/categories')} />
           <SettingsRow label="Contas" icon="bank" onPress={() => router.push('/(app)/accounts')} />
           <SettingsRow
             label="Cartões"
@@ -65,14 +49,34 @@ export function MoreScreen() {
             icon="installments"
             onPress={() => router.push('/installment')}
           />
-          {futureRows.slice(2).map((row) => (
-            <SettingsRow
-              key={row.label}
-              label={row.label}
-              icon={row.icon}
-              onPress={() => undefined}
-            />
-          ))}
+          <SettingsRow
+            label="Preferências"
+            icon="settings"
+            onPress={() => router.push('/preferences')}
+          />
+          <SettingsRow
+            label="Notificações"
+            icon="bell"
+            onPress={() => router.push('/(app)/more/notifications')}
+          />
+          <SettingsRow
+            label="Segurança"
+            icon="lock"
+            onPress={() =>
+              Alert.alert(
+                'Em breve',
+                'As opções de segurança estarão disponíveis em uma próxima etapa.',
+              )
+            }
+          />
+          <SettingsRow
+            label="Assinatura"
+            icon="crown"
+            onPress={() =>
+              Alert.alert('Em breve', 'O plano Tonti estará disponível em uma próxima etapa.')
+            }
+          />
+          <SettingsRow label="Ajuda" icon="help" onPress={() => router.push('/(app)/more/help')} />
           <SettingsRow label="Sair" icon="logout" onPress={() => void logout()} />
         </Card>
       </ScrollView>
@@ -81,14 +85,14 @@ export function MoreScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 20, paddingTop: 8 },
   profile: { alignItems: 'center', gap: 8, paddingVertical: 12 },
   avatar: {
     width: 72,
     height: 72,
     borderRadius: radius.pill,
-    backgroundColor: colors.primarySoft,
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
   },

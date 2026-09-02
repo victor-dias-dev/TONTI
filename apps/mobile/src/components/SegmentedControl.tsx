@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { colors, radius } from '../theme';
+import { radius } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 
 interface Option<T extends string> {
@@ -18,8 +19,9 @@ export function SegmentedControl<T extends string>({
   value,
   onChange,
 }: SegmentedControlProps<T>) {
+  const colors = useColors();
   return (
-    <View style={styles.track}>
+    <View style={[styles.track, { backgroundColor: colors.surfaceMuted }]}>
       {options.map((option) => {
         const active = option.value === value;
         const expense = option.value === 'expense' && active;
@@ -30,7 +32,11 @@ export function SegmentedControl<T extends string>({
             accessibilityRole="button"
             accessibilityState={{ selected: active }}
             accessibilityLabel={option.label}
-            style={[styles.item, active ? styles.active : null, expense ? styles.expense : null]}
+            style={[
+              styles.item,
+              active ? { backgroundColor: colors.surface } : null,
+              expense ? { backgroundColor: colors.dangerSoft } : null,
+            ]}
           >
             <AppText
               variant="label"
@@ -48,7 +54,6 @@ export function SegmentedControl<T extends string>({
 const styles = StyleSheet.create({
   track: {
     flexDirection: 'row',
-    backgroundColor: colors.surfaceMuted,
     borderRadius: radius.pill,
     padding: 4,
   },
@@ -58,6 +63,4 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: radius.pill,
   },
-  active: { backgroundColor: colors.surface },
-  expense: { backgroundColor: colors.dangerSoft },
 });

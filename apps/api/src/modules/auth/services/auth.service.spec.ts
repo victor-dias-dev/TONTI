@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import type { User } from '@prisma/client';
+import { ThemePreference, type User } from '@prisma/client';
 import { AppException } from '../../../common/errors/app.exception';
 import { ErrorCode } from '../../../common/errors/error-codes';
 import { PasswordService } from '../../../common/security/password.service';
@@ -17,6 +17,16 @@ const user: User = {
   currency: 'BRL',
   locale: 'pt-BR',
   timezone: 'America/Sao_Paulo',
+  theme: ThemePreference.SYSTEM,
+  hideBalances: false,
+  periodStartDay: 1,
+  notificationsEnabled: true,
+  notifyBills: true,
+  notifyInvoices: true,
+  notifyBudgets: false,
+  notifyUnusual: true,
+  notifyGoals: false,
+  notifyLowBalance: true,
   createdAt: new Date('2026-08-30T10:00:00.000Z'),
   updatedAt: new Date('2026-08-30T10:00:00.000Z'),
   deletedAt: null,

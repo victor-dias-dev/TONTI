@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
-import { colors, radius } from '../theme';
+import { radius } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 
 interface CategoryChipProps {
@@ -7,8 +8,9 @@ interface CategoryChipProps {
 }
 
 export function CategoryChip({ label }: CategoryChipProps) {
+  const colors = useColors();
   return (
-    <View style={styles.chip}>
+    <View style={[styles.chip, { backgroundColor: colors.chip }]}>
       <AppText variant="micro" color={colors.muted}>
         {label}
       </AppText>
@@ -18,7 +20,6 @@ export function CategoryChip({ label }: CategoryChipProps) {
 
 const styles = StyleSheet.create({
   chip: {
-    backgroundColor: colors.chip,
     borderRadius: radius.pill,
     paddingHorizontal: 8,
     paddingVertical: 2,

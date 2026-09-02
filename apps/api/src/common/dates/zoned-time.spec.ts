@@ -1,4 +1,4 @@
-import { fromZonedCivil, monthRange, zonedCivilDate } from './zoned-time';
+import { financialMonthRange, fromZonedCivil, monthRange, zonedCivilDate } from './zoned-time';
 
 describe('zoned-time', () => {
   const timeZone = 'America/Sao_Paulo';
@@ -17,5 +17,11 @@ describe('zoned-time', () => {
     const { start, end } = monthRange(new Date('2026-08-15T12:00:00.000Z'), timeZone);
     expect(start.toISOString()).toBe('2026-08-01T03:00:00.000Z');
     expect(end.toISOString()).toBe('2026-09-01T03:00:00.000Z');
+  });
+
+  it('builds a custom financial month when the period starts on day 15', () => {
+    const { start, end } = financialMonthRange(new Date('2026-08-20T12:00:00.000Z'), timeZone, 15);
+    expect(start.toISOString()).toBe('2026-08-15T03:00:00.000Z');
+    expect(end.toISOString()).toBe('2026-09-15T03:00:00.000Z');
   });
 });

@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { colors, radius, shadows } from '../theme';
+import { radius, shadows } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -10,8 +11,9 @@ interface MonthSelectorProps {
 }
 
 export function MonthSelector({ label, onPrev, onNext }: MonthSelectorProps) {
+  const colors = useColors();
   return (
-    <View style={styles.wrap}>
+    <View style={[styles.wrap, { backgroundColor: colors.overlay }]}>
       <Pressable
         onPress={onPrev}
         accessibilityRole="button"
@@ -40,7 +42,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: radius.pill,
     paddingHorizontal: 16,
     paddingVertical: 8,

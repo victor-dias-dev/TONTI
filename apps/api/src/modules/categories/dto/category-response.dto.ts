@@ -15,4 +15,10 @@ export class CategoryResponseDto {
 
   @ApiProperty({ enum: ['income', 'expense'] })
   type!: 'income' | 'expense';
+
+  @ApiProperty()
+  isSystem!: boolean;
+
+  @ApiProperty()
+  transactionCount!: number;
 }

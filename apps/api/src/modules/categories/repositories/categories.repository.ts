@@ -22,4 +22,9 @@ export abstract class CategoriesRepository {
   ): Promise<Category>;
   abstract delete(id: string): Promise<void>;
   abstract countUsage(id: string): Promise<{ transactions: number; budgets: number }>;
+  abstract countTransactionsInRange(
+    userId: string,
+    from: Date,
+    to: Date,
+  ): Promise<Array<{ categoryId: string; count: number }>>;
 }

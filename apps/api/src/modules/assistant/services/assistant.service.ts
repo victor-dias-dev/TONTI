@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Decimal } from '@prisma/client/runtime/library';
-import { monthRange, previousMonthRange } from '../../../common/dates/zoned-time';
+import { financialMonthRange, previousFinancialMonthRange } from '../../../common/dates/zoned-time';
 import { formatBrlFromCents } from '../../../common/labels/pt-br';
 import { decimalToCents } from '../../../common/money/money';
 import { UsersService } from '../../users/users.service';
@@ -56,9 +56,10 @@ export class AssistantService {
   private async snapshot(userId: string): Promise<AssistantSnapshot> {
     const user = await this.usersService.findById(userId);
     const timeZone = user?.timezone ?? 'America/Sao_Paulo';
+    const periodStartDay = user?.periodStartDay ?? 1;
     const now = new Date();
-    const current = monthRange(now, timeZone);
-    const previous = previousMonthRange(now, timeZone);
+    const current = financialMonthRange(now, timeZone, periodStartDay);
+    const previous = previousFinancialMonthRange(now, timeZone, periodStartDay);
     return this.assistantRepository.getSnapshot(userId, current.start, current.end, previous.start);
   }
 

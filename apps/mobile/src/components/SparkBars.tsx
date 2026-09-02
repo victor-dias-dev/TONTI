@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import type { AccountActivityPoint } from '../domain';
-import { colors, radius } from '../theme';
+import { radius } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 
 interface SparkBarsProps {
@@ -8,6 +9,7 @@ interface SparkBarsProps {
 }
 
 export function SparkBars({ points }: SparkBarsProps) {
+  const colors = useColors();
   const max = points.reduce((highest, point) => {
     const value = BigInt(point.cents.replace(/[+-]/g, '') || '0');
     return value > highest ? value : highest;
@@ -21,7 +23,12 @@ export function SparkBars({ points }: SparkBarsProps) {
         return (
           <View key={point.id} style={styles.col}>
             <View style={styles.track}>
-              <View style={[styles.bar, { height: Math.max(8, height) }]} />
+              <View
+                style={[
+                  styles.bar,
+                  { height: Math.max(8, height), backgroundColor: colors.primary },
+                ]}
+              />
             </View>
             <AppText variant="micro" color={colors.muted} align="center">
               {point.label}
@@ -39,7 +46,6 @@ const styles = StyleSheet.create({
   track: { flex: 1, width: '100%', justifyContent: 'flex-end' },
   bar: {
     width: '100%',
-    backgroundColor: colors.primary,
     borderRadius: radius.sm,
     minHeight: 8,
   },

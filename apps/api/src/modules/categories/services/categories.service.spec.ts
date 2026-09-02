@@ -27,6 +27,7 @@ describe('CategoriesService', () => {
     update: jest.Mock;
     delete: jest.Mock;
     countUsage: jest.Mock;
+    countTransactionsInRange: jest.Mock;
   };
 
   beforeEach(() => {
@@ -38,8 +39,18 @@ describe('CategoriesService', () => {
       update: jest.fn(),
       delete: jest.fn(),
       countUsage: jest.fn(),
+      countTransactionsInRange: jest.fn().mockResolvedValue([]),
     };
-    service = new CategoriesService(repository as unknown as CategoriesRepository);
+    const usersService = {
+      findById: jest.fn().mockResolvedValue({
+        timezone: 'America/Sao_Paulo',
+        periodStartDay: 1,
+      }),
+    };
+    service = new CategoriesService(
+      repository as unknown as CategoriesRepository,
+      usersService as never,
+    );
   });
 
   it('maps color to iconBg for the mobile contract', async () => {
@@ -54,6 +65,8 @@ describe('CategoriesService', () => {
         icon: 'food',
         iconBg: category.color,
         type: 'expense',
+        isSystem: true,
+        transactionCount: 0,
       },
     ]);
   });

@@ -20,10 +20,14 @@ import {
   useTransactions,
 } from '../../../hooks/use-finance';
 import { useSession } from '../../../hooks/use-session';
-import { colors } from '../../../theme';
+import { useColors, useThemeScheme } from '../../../theme';
 import { findCategory, firstName } from '../../../utils/lookups';
 
 export function HomeScreen() {
+  const colors = useColors();
+  const { hideBalances, currency } = useThemeScheme();
+  void hideBalances;
+  void currency;
   const { user } = useSession();
   const dashboard = useDashboard();
   const transactions = useTransactions();
@@ -36,7 +40,7 @@ export function HomeScreen() {
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
 
   return (
-    <View style={styles.safe}>
+    <View style={[styles.safe, { backgroundColor: colors.background }]}>
       <AppHeader />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View>
@@ -54,7 +58,13 @@ export function HomeScreen() {
             <View style={styles.stats}>
               <StatTile label="Entradas" cents={data.incomeCents} icon="arrowDown" />
               <StatTile label="Saídas" cents={data.expenseCents} icon="arrowUp" />
-              <StatTile label="Disponível" cents={data.availableCents} icon="wallet" emphasized />
+              <StatTile
+                label="Disponível"
+                cents={data.availableCents}
+                icon="wallet"
+                emphasized
+                signed
+              />
             </View>
             <Pressable
               onPress={() => router.push('/assistant')}
@@ -135,7 +145,7 @@ function relativeLabel(iso: string) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 120, gap: 16, paddingTop: 8 },
   stats: { flexDirection: 'row', gap: 8 },
   spentHead: {

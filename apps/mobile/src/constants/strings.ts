@@ -26,6 +26,7 @@ export const strings = {
   errors: {
     invalidEmail: 'Informe um e-mail válido',
     shortPassword: 'A senha deve ter pelo menos 8 caracteres',
+    passwordMismatch: 'As senhas não coincidem',
     shortName: 'Informe seu nome',
     generic: 'Não foi possível concluir. Tente novamente.',
     session: 'Sessão expirada. Entre novamente.',

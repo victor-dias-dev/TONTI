@@ -56,7 +56,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingTop: 32, paddingBottom: 24, gap: 16 },
   subtitle: { marginBottom: 8 },
   hero: {

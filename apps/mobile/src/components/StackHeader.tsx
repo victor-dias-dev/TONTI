@@ -1,6 +1,8 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors, radius } from '../theme';
+import type { IconName } from '../domain';
+import { radius } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -9,24 +11,54 @@ interface StackHeaderProps {
   onBack: () => void;
   close?: boolean;
   onPressNotifications?: () => void;
+  titleStart?: boolean;
+  rightLabel?: string;
+  rightIcon?: IconName;
+  onRightPress?: () => void;
 }
 
-export function StackHeader({ title, onBack, close, onPressNotifications }: StackHeaderProps) {
+export function StackHeader({
+  title,
+  onBack,
+  close,
+  onPressNotifications,
+  titleStart,
+  rightLabel,
+  rightIcon,
+  onRightPress,
+}: StackHeaderProps) {
   const insets = useSafeAreaInsets();
+  const colors = useColors();
   return (
-    <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
+    <View style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: colors.overlay }]}>
       <Pressable
         onPress={onBack}
         accessibilityRole="button"
         accessibilityLabel="Voltar"
-        style={styles.back}
+        style={[styles.back, { backgroundColor: colors.surfaceMuted }]}
       >
         <Icon name={close ? 'close' : 'chevronLeft'} size={16} color={colors.primary} />
       </Pressable>
-      <AppText variant="titleSm" color={colors.primary}>
+      <AppText
+        variant="titleSm"
+        color={colors.primary}
+        style={titleStart ? styles.titleStart : undefined}
+      >
         {title}
       </AppText>
-      {onPressNotifications ? (
+      {rightLabel && onRightPress ? (
+        <Pressable
+          onPress={onRightPress}
+          accessibilityRole="button"
+          accessibilityLabel={rightLabel}
+          style={styles.right}
+        >
+          {rightIcon ? <Icon name={rightIcon} size={16} color={colors.primary} /> : null}
+          <AppText variant="label" color={colors.primary}>
+            {rightLabel}
+          </AppText>
+        </Pressable>
+      ) : onPressNotifications ? (
         <Pressable
           onPress={onPressNotifications}
           accessibilityRole="button"
@@ -35,7 +67,7 @@ export function StackHeader({ title, onBack, close, onPressNotifications }: Stac
         >
           <Icon name="bell" size={18} color={colors.primary} />
         </Pressable>
-      ) : (
+      ) : titleStart ? null : (
         <View style={styles.back} />
       )}
     </View>
@@ -49,13 +81,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingBottom: 12,
-    backgroundColor: colors.overlay,
   },
   back: {
     width: 40,
     height: 40,
     borderRadius: radius.pill,
-    backgroundColor: colors.surfaceMuted,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -64,5 +94,14 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  titleStart: { flex: 1, marginLeft: 4 },
+  right: {
+    minHeight: 40,
+    borderRadius: radius.pill,
+    paddingHorizontal: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
 });

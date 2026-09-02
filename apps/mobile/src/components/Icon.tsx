@@ -1,6 +1,6 @@
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import type { IconName } from '../domain';
-import { colors } from '../theme';
+import { useColors } from '../theme';
 
 interface IconProps {
   name: IconName;
@@ -8,8 +8,9 @@ interface IconProps {
   color?: string;
 }
 
-export function Icon({ name, size = 20, color = colors.primary }: IconProps) {
-  const stroke = color;
+export function Icon({ name, size = 20, color }: IconProps) {
+  const palette = useColors();
+  const stroke = color ?? palette.primary;
   const common = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none' as const };
 
   switch (name) {
@@ -571,6 +572,78 @@ export function Icon({ name, size = 20, color = colors.primary }: IconProps) {
             stroke={stroke}
             strokeWidth={1.7}
             strokeLinecap="round"
+          />
+        </Svg>
+      );
+    case 'eyeOff':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M4 12s3.2-5.5 8-5.5S20 12 20 12s-3.2 5.5-8 5.5S4 12 4 12z"
+            stroke={stroke}
+            strokeWidth={1.7}
+          />
+          <Circle cx={12} cy={12} r={2.2} stroke={stroke} strokeWidth={1.7} />
+          <Path d="M5 19 19 5" stroke={stroke} strokeWidth={1.7} strokeLinecap="round" />
+        </Svg>
+      );
+    case 'trash':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M5 7h14M9 7V5h6v2M8 7l.8 12h6.4L16 7"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinejoin="round"
+          />
+        </Svg>
+      );
+    case 'headset':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M5 13v-1a7 7 0 0 1 14 0v1"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinecap="round"
+          />
+          <Rect x={3.5} y={12} width={4} height={6} rx={1.5} stroke={stroke} strokeWidth={1.7} />
+          <Rect x={16.5} y={12} width={4} height={6} rx={1.5} stroke={stroke} strokeWidth={1.7} />
+          <Path
+            d="M20.5 17v1a2 2 0 0 1-2 2H14"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinecap="round"
+          />
+        </Svg>
+      );
+    case 'rocket':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M12 3c3 2.2 5 6 5 10.2 0 1.4-.3 2.6-.8 3.8H7.8C7.3 15.8 7 14.6 7 13.2 7 9 9 5.2 12 3z"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinejoin="round"
+          />
+          <Circle cx={12} cy={10} r={1.6} stroke={stroke} strokeWidth={1.6} />
+          <Path
+            d="M8.2 17.2 7 21l3.2-1.4M15.8 17.2 17 21l-3.2-1.4"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinejoin="round"
+          />
+        </Svg>
+      );
+    case 'exchange':
+      return (
+        <Svg {...common}>
+          <Path
+            d="M5 8h11l-2.5-2.5M19 16H8l2.5 2.5"
+            stroke={stroke}
+            strokeWidth={1.7}
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </Svg>
       );

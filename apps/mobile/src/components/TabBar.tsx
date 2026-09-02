@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { IconName } from '../domain';
-import { colors } from '../theme';
+import { radius } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -25,11 +26,25 @@ interface TabBarProps {
 
 export function TabBar({ state, navigation }: TabBarProps) {
   const insets = useSafeAreaInsets();
+  const colors = useColors();
   const activeRoute = state.routes[state.index]?.name ?? 'index';
-  const activeFamily = activeRoute.startsWith('accounts') ? 'accounts' : activeRoute;
+  const activeFamily = activeRoute.startsWith('accounts')
+    ? 'accounts'
+    : activeRoute.startsWith('more')
+      ? 'more'
+      : activeRoute;
 
   return (
-    <View style={[styles.bar, { paddingBottom: Math.max(insets.bottom, 6) }]}>
+    <View
+      style={[
+        styles.bar,
+        {
+          paddingBottom: Math.max(insets.bottom, 6),
+          backgroundColor: colors.background,
+          borderTopColor: colors.border,
+        },
+      ]}
+    >
       {tabs.map((tab) => {
         const focused =
           activeFamily === tab.name || (tab.name === 'accounts' && activeRoute === 'accounts');
@@ -40,7 +55,10 @@ export function TabBar({ state, navigation }: TabBarProps) {
             accessibilityRole="tab"
             accessibilityState={{ selected: focused }}
             accessibilityLabel={tab.label}
-            style={[styles.item, focused ? styles.active : null]}
+            style={[
+              styles.item,
+              focused ? { backgroundColor: colors.primarySoft50, borderRadius: radius.md } : null,
+            ]}
           >
             <Icon
               name={tab.icon}
@@ -66,12 +84,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: colors.background,
     paddingHorizontal: 8,
     paddingTop: 6,
     minHeight: 56,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
   },
   item: {
     flex: 1,
@@ -80,9 +96,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 12,
     gap: 2,
-  },
-  active: {
-    backgroundColor: colors.primarySoft50,
   },
   activeLabel: {
     fontFamily: 'Inter_600SemiBold',

@@ -1,6 +1,7 @@
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 import type { IconName } from '../domain';
-import { colors, radius, shadows, typography } from '../theme';
+import { radius, shadows, typography } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -21,6 +22,7 @@ export function PrimaryButton({
   accessibilityLabel,
   icon,
 }: PrimaryButtonProps) {
+  const colors = useColors();
   const isDisabled = disabled || loading;
   return (
     <Pressable
@@ -31,16 +33,17 @@ export function PrimaryButton({
       style={({ pressed }) => [
         styles.button,
         shadows.card,
+        { backgroundColor: colors.brand },
         pressed && !isDisabled ? styles.pressed : null,
         isDisabled ? styles.disabled : null,
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.onPrimary} />
+        <ActivityIndicator color={colors.onBrand} />
       ) : (
         <View style={styles.content}>
-          {icon ? <Icon name={icon} size={20} color={colors.onPrimary} /> : null}
-          <AppText variant="label" color={colors.onPrimary} style={styles.label}>
+          {icon ? <Icon name={icon} size={20} color={colors.onBrand} /> : null}
+          <AppText variant="label" color={colors.onBrand} style={styles.label}>
             {label}
           </AppText>
         </View>
@@ -53,7 +56,6 @@ const styles = StyleSheet.create({
   button: {
     height: 56,
     borderRadius: radius.xxl,
-    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
@@ -61,7 +63,6 @@ const styles = StyleSheet.create({
   content: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   label: {
     ...typography.bodySemi,
-    color: colors.onPrimary,
     fontSize: 14,
   },
   pressed: { opacity: 0.88 },

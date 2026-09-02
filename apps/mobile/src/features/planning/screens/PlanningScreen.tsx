@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import {
   AppHeader,
   AppText,
@@ -10,10 +10,11 @@ import {
   SettingsRow,
 } from '../../../components';
 import { useCategories, usePlanning } from '../../../hooks/use-finance';
-import { colors } from '../../../theme';
+import { colors, useColors } from '../../../theme';
 import { findCategory } from '../../../utils/lookups';
 
 export function PlanningScreen() {
+  const colors = useColors();
   const planning = usePlanning();
   const categories = useCategories();
   const data = planning.data;
@@ -56,15 +57,7 @@ export function PlanningScreen() {
           </>
         ) : null}
 
-        <GhostButton
-          label="Nova Categoria"
-          onPress={() =>
-            Alert.alert(
-              'Em breve',
-              'O cadastro de categorias estará disponível em uma próxima etapa.',
-            )
-          }
-        />
+        <GhostButton label="Novo planejamento" onPress={() => router.push('/(app)/planning/new')} />
       </ScrollView>
     </View>
   );
@@ -95,7 +88,7 @@ function SummaryTile({
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 16, paddingTop: 8 },
   summary: { flexDirection: 'row', gap: 8 },
   tile: { flex: 1, alignItems: 'center', gap: 4 },

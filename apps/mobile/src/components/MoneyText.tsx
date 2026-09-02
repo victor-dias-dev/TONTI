@@ -1,7 +1,7 @@
 import type { TextStyle } from 'react-native';
 import type { MoneyCents } from '../domain';
-import { formatMoney, formatMoneyCompact } from '../domain';
-import { colors } from '../theme';
+import { formatMoney, formatMoneyCompact, isNegativeMoney } from '../domain';
+import { useThemeScheme } from '../theme';
 import { AppText } from './AppText';
 
 interface MoneyTextProps {
@@ -9,6 +9,7 @@ interface MoneyTextProps {
   compact?: boolean;
   signed?: boolean;
   income?: boolean;
+  sign?: 'auto' | 'always' | 'never';
   variant?: 'display' | 'titleLg' | 'titleSm' | 'heading' | 'label';
   color?: string;
   style?: TextStyle;
@@ -19,22 +20,35 @@ export function MoneyText({
   compact,
   signed,
   income,
+  sign,
   variant = 'heading',
   color,
   style,
 }: MoneyTextProps) {
+  const { colors, hideBalances, currency } = useThemeScheme();
+  void hideBalances;
+  void currency;
+  const signMode = sign ?? (signed ? (income ? 'always' : 'auto') : 'never');
   const value = compact
-    ? formatMoneyCompact(cents)
-    : formatMoney(cents, { sign: signed ? (income ? 'always' : 'auto') : 'never' });
+    ? formatMoneyCompact(cents, { sign: signMode })
+    : formatMoney(cents, { sign: signMode });
   const display =
-    signed && !income && !cents.startsWith('-')
+    !sign && signed && !income && !cents.startsWith('-')
       ? `- ${formatMoney(cents, { sign: 'never' })}`
       : value;
+  const negative = isNegativeMoney(cents);
 
   return (
     <AppText
       variant={variant}
-      color={color ?? (income ? colors.incomeValue : colors.text)}
+      color={
+        color ??
+        (income
+          ? colors.incomeValue
+          : negative && signMode !== 'never'
+            ? colors.danger
+            : colors.text)
+      }
       style={style}
     >
       {display}

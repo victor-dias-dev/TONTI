@@ -1,6 +1,8 @@
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { type ReactNode } from 'react';
+import { Pressable, StyleSheet, TextInput, View, type KeyboardTypeOptions } from 'react-native';
 import type { IconName } from '../domain';
-import { colors } from '../theme';
+import { radius } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -13,6 +15,10 @@ interface FormFieldProps {
   onPress?: () => void;
   onChangeText?: (text: string) => void;
   last?: boolean;
+  secureTextEntry?: boolean;
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  keyboardType?: KeyboardTypeOptions;
+  trailing?: ReactNode;
 }
 
 export function FormField({
@@ -24,9 +30,25 @@ export function FormField({
   onPress,
   onChangeText,
   last,
+  secureTextEntry,
+  autoCapitalize,
+  keyboardType,
+  trailing,
 }: FormFieldProps) {
+  const colors = useColors();
   const content = (
-    <View style={[styles.row, last ? null : styles.border]}>
+    <View
+      style={[
+        styles.row,
+        last
+          ? null
+          : {
+              borderBottomWidth: StyleSheet.hairlineWidth,
+              borderBottomColor: colors.chip,
+              marginBottom: 12,
+            },
+      ]}
+    >
       <View style={styles.left}>
         <Icon name={icon} size={18} color={colors.muted} />
         {editable ? (
@@ -35,8 +57,12 @@ export function FormField({
             onChangeText={onChangeText}
             placeholder={placeholder ?? label}
             placeholderTextColor={colors.mutedSoft}
-            style={styles.input}
+            style={[styles.input, { color: colors.text }]}
             accessibilityLabel={label}
+            secureTextEntry={secureTextEntry}
+            autoCapitalize={autoCapitalize}
+            keyboardType={keyboardType}
+            autoCorrect={false}
           />
         ) : (
           <AppText variant="body" color={colors.muted}>
@@ -44,8 +70,10 @@ export function FormField({
           </AppText>
         )}
       </View>
-      {value && !editable ? (
-        <View style={styles.pill}>
+      {trailing ? (
+        <View style={styles.trailing}>{trailing}</View>
+      ) : value && !editable ? (
+        <View style={[styles.pill, { backgroundColor: colors.surfaceMuted }]}>
           <AppText variant="label" color={colors.primary}>
             {value}
           </AppText>
@@ -73,16 +101,11 @@ const styles = StyleSheet.create({
     paddingBottom: 13,
     minHeight: 48,
   },
-  border: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.chip,
-    marginBottom: 12,
-  },
-  left: { flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 },
-  input: { flex: 1, fontSize: 16, color: colors.text, fontFamily: 'Inter_400Regular' },
+  left: { flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 },
+  trailing: { marginLeft: 8, flexShrink: 0 },
+  input: { flex: 1, fontSize: 16, fontFamily: 'Inter_400Regular' },
   pill: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: 999,
+    borderRadius: radius.pill,
     paddingHorizontal: 12,
     paddingVertical: 4,
     flexDirection: 'row',

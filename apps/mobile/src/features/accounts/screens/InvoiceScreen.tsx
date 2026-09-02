@@ -93,7 +93,7 @@ export function InvoiceScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 20 },
   hero: {
     backgroundColor: colors.surface,

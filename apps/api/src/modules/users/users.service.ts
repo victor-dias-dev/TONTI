@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type { User } from '@prisma/client';
 import type { PublicUser } from '@tonti/types';
-import { UsersRepository } from './repositories/users.repository';
+import { UsersRepository, type UserUpdate } from './repositories/users.repository';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +23,7 @@ export class UsersService {
     return this.usersRepository.create(data);
   }
 
-  update(id: string, data: { name?: string; avatarUrl?: string | null }): Promise<User> {
+  update(id: string, data: UserUpdate): Promise<User> {
     return this.usersRepository.update(id, data);
   }
 

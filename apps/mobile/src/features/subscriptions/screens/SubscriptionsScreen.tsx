@@ -1,5 +1,6 @@
-import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { AppHeader, AppText, Card, Icon, MoneyText } from '../../../components';
+import { router } from 'expo-router';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { AppHeader, AppText, Card, GhostButton, Icon, MoneyText } from '../../../components';
 import type { Subscription, SubscriptionTone } from '../../../domain';
 import { formatMoney, formatMoneyCompact } from '../../../domain';
 import { useSubscriptions } from '../../../hooks/use-subscriptions';
@@ -69,12 +70,7 @@ export function SubscriptionsScreen() {
                   Serviços ativos
                 </AppText>
                 <Pressable
-                  onPress={() =>
-                    Alert.alert(
-                      'Em breve',
-                      'O cadastro de assinaturas estará disponível em uma próxima etapa.',
-                    )
-                  }
+                  onPress={() => router.push('/(app)/planning/new-subscription')}
                   accessibilityRole="button"
                   accessibilityLabel="Adicionar"
                 >
@@ -94,6 +90,13 @@ export function SubscriptionsScreen() {
               </View>
             </View>
           </>
+        ) : null}
+
+        {!data || data.items.length === 0 ? (
+          <GhostButton
+            label="Nova assinatura"
+            onPress={() => router.push('/(app)/planning/new-subscription')}
+          />
         ) : null}
       </ScrollView>
     </View>
@@ -131,7 +134,7 @@ function subscriptionWell(tone: SubscriptionTone) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 16, paddingTop: 8 },
   insight: {
     backgroundColor: colors.primary,

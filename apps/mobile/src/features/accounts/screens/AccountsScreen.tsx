@@ -2,9 +2,10 @@ import { router } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { AccountCard, AppHeader, AppText, GhostButton, Icon, MoneyText } from '../../../components';
 import { useAccounts, useCards } from '../../../hooks/use-finance';
-import { colors, radius, shadows } from '../../../theme';
+import { colors, radius, shadows, useColors } from '../../../theme';
 
 export function AccountsScreen() {
+  const colors = useColors();
   const accounts = useAccounts();
   const cards = useCards();
 
@@ -25,8 +26,6 @@ export function AccountsScreen() {
             />
           ))}
         </View>
-
-        <GhostButton label="Adicionar Conta" onPress={() => router.push('/connect-account')} />
 
         <View>
           <AppText variant="titleSm" color={colors.primary} style={styles.section}>
@@ -54,6 +53,10 @@ export function AccountsScreen() {
               <MoneyText cents={card.invoiceCents} variant="titleSm" color={colors.primary} />
             </Pressable>
           ))}
+          <GhostButton
+            label="Adicionar Cartão"
+            onPress={() => router.push('/(app)/accounts/new-card')}
+          />
         </View>
       </ScrollView>
     </View>
@@ -61,7 +64,7 @@ export function AccountsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 16, paddingTop: 8 },
   list: { gap: 12 },
   section: { marginBottom: 12 },

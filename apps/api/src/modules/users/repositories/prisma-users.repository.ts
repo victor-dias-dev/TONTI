@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import type { User } from '@prisma/client';
 import { DEFAULT_CATEGORIES } from '../../../common/catalog/default-categories';
+import { DEFAULT_ACCOUNTS } from '../../../common/catalog/default-accounts';
 import { PrismaService } from '../../../database/prisma.service';
-import { UsersRepository } from './users.repository';
+import { UsersRepository, type UserUpdate } from './users.repository';
 
 @Injectable()
 export class PrismaUsersRepository extends UsersRepository {
@@ -33,11 +34,12 @@ export class PrismaUsersRepository extends UsersRepository {
       data: {
         ...data,
         categories: { create: DEFAULT_CATEGORIES },
+        accounts: { create: DEFAULT_ACCOUNTS },
       },
     });
   }
 
-  update(id: string, data: { name?: string; avatarUrl?: string | null }): Promise<User> {
+  update(id: string, data: UserUpdate): Promise<User> {
     return this.prisma.user.update({
       where: { id },
       data,

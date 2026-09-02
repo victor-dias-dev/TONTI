@@ -19,6 +19,7 @@ import { useEffect } from 'react';
 import { queryClient } from '../src/api/query-client';
 import { useAuthStore } from '../src/stores/auth-store';
 import { useOnboardingStore } from '../src/stores/onboarding-store';
+import { ThemeProvider, useThemeScheme } from '../src/theme';
 
 void SplashScreen.preventAutoHideAsync();
 
@@ -53,8 +54,22 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <StatusBar style="dark" />
-      {ready ? <Stack screenOptions={{ headerShown: false }} /> : null}
+      <ThemeProvider>{ready ? <ThemedNavigation /> : null}</ThemeProvider>
     </QueryClientProvider>
+  );
+}
+
+function ThemedNavigation() {
+  const { colors, scheme } = useThemeScheme();
+  return (
+    <>
+      <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.background },
+        }}
+      />
+    </>
   );
 }

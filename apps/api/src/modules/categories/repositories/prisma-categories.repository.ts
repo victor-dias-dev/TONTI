@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { Category, CategoryType } from '@prisma/client';
+import { TransactionStatus, type Category, type CategoryType } from '@prisma/client';
 import { PrismaService } from '../../../database/prisma.service';
 import { CategoriesRepository } from './categories.repository';
 
@@ -51,5 +51,18 @@ export class PrismaCategoriesRepository extends CategoriesRepository {
       this.prisma.budget.count({ where: { categoryId: id } }),
     ]);
     return { transactions, budgets };
+  }
+
+  async countTransactionsInRange(
+    userId: string,
+    from: Date,
+    to: Date,
+  ): Promise<Array<{ categoryId: string; count: number }>> {
+    const rows = await this.prisma.transaction.groupBy({
+      by: ['categoryId'],
+      where: { userId, date: { gte: from, lt: to }, status: TransactionStatus.CONFIRMED },
+      _count: { _all: true },
+    });
+    return rows.map((row) => ({ categoryId: row.categoryId, count: row._count._all }));
   }
 }

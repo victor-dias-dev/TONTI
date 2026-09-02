@@ -85,6 +85,46 @@ export function previousMonthRange(date: Date, timeZone: string): { start: Date;
   };
 }
 
+export function financialMonthRange(
+  date: Date,
+  timeZone: string,
+  startDay = 1,
+): { start: Date; end: Date } {
+  const day = Math.min(Math.max(startDay, 1), 28);
+  if (day <= 1) {
+    return monthRange(date, timeZone);
+  }
+
+  const civil = zonedCivilDate(date, timeZone);
+  let startYear = civil.year;
+  let startMonth = civil.month;
+  if (civil.day < day) {
+    const previous = addCalendarMonths({ year: civil.year, month: civil.month, day: 1 }, -1);
+    startYear = previous.year;
+    startMonth = previous.month;
+  }
+
+  const start = fromZonedCivil(
+    startYear,
+    startMonth,
+    clampDay(startYear, startMonth, day),
+    timeZone,
+  );
+  const next = addCalendarMonths({ year: startYear, month: startMonth, day: 1 }, 1);
+  const end = fromZonedCivil(next.year, next.month, clampDay(next.year, next.month, day), timeZone);
+  return { start, end };
+}
+
+export function previousFinancialMonthRange(
+  date: Date,
+  timeZone: string,
+  startDay = 1,
+): { start: Date; end: Date } {
+  const current = financialMonthRange(date, timeZone, startDay);
+  const beforeStart = new Date(current.start.getTime() - 12 * 60 * 60 * 1000);
+  return financialMonthRange(beforeStart, timeZone, startDay);
+}
+
 export function addDays(civil: CivilDate, days: number): CivilDate {
   const date = new Date(Date.UTC(civil.year, civil.month - 1, civil.day + days));
   return { year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate() };

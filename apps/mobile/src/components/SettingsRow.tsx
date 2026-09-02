@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import type { IconName } from '../domain';
-import { colors, radius } from '../theme';
+import { radius } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -12,6 +13,7 @@ interface SettingsRowProps {
 }
 
 export function SettingsRow({ label, icon, caption, onPress }: SettingsRowProps) {
+  const colors = useColors();
   return (
     <Pressable
       onPress={onPress}
@@ -21,7 +23,7 @@ export function SettingsRow({ label, icon, caption, onPress }: SettingsRowProps)
       style={({ pressed }) => [styles.row, pressed && onPress ? styles.pressed : null]}
     >
       <View style={styles.left}>
-        <View style={styles.icon}>
+        <View style={[styles.icon, { backgroundColor: colors.surfaceMuted }]}>
           <Icon name={icon} size={18} color={colors.primary} />
         </View>
         <View>
@@ -53,7 +55,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: radius.pill,
-    backgroundColor: colors.surfaceMuted,
     alignItems: 'center',
     justifyContent: 'center',
   },

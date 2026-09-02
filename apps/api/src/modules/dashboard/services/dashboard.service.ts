@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { TransactionType } from '@prisma/client';
-import { monthRange, previousMonthRange, zonedCivilDate } from '../../../common/dates/zoned-time';
+import {
+  financialMonthRange,
+  previousFinancialMonthRange,
+  zonedCivilDate,
+} from '../../../common/dates/zoned-time';
 import { dueRelativeLabel, formatVariationLabel, monthLabel } from '../../../common/labels/pt-br';
 import { decimalToCents, zeroDecimal } from '../../../common/money/money';
 import { UsersService } from '../../users/users.service';
@@ -17,9 +21,10 @@ export class DashboardService {
   async get(userId: string): Promise<DashboardResponseDto> {
     const user = await this.usersService.findById(userId);
     const timeZone = user?.timezone ?? 'America/Sao_Paulo';
+    const periodStartDay = user?.periodStartDay ?? 1;
     const now = new Date();
-    const current = monthRange(now, timeZone);
-    const previous = previousMonthRange(now, timeZone);
+    const current = financialMonthRange(now, timeZone, periodStartDay);
+    const previous = previousFinancialMonthRange(now, timeZone, periodStartDay);
     const upcomingUntil = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
     const today = zonedCivilDate(now, timeZone);
     const upcomingFrom = new Date(Date.UTC(today.year, today.month - 1, today.day));

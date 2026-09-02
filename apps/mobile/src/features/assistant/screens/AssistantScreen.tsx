@@ -180,7 +180,7 @@ function insightWell(tone: AiInsightTone) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 24, gap: 16, paddingTop: 8 },
   assistantRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 16 },
   avatar: {

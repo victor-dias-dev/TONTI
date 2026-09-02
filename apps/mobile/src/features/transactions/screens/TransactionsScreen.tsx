@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { AppHeader, AppText, Card, FAB, MonthSelector, TransactionRow } from '../../../components';
 import { useAccounts, useCategories, useTransactions } from '../../../hooks/use-finance';
-import { colors, radius, shadows } from '../../../theme';
+import { colors, radius, shadows, useColors } from '../../../theme';
 import {
   findAccount,
   findCategory,
@@ -12,6 +12,7 @@ import {
 } from '../../../utils/lookups';
 
 export function TransactionsScreen() {
+  const colors = useColors();
   const [query, setQuery] = useState('');
   const [filterOpen, setFilterOpen] = useState(false);
   const [cursor, setCursor] = useState({ year: 2026, month: 7 });
@@ -93,7 +94,7 @@ function shiftMonth(current: { year: number; month: number }, delta: number) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 120, gap: 16, paddingTop: 8 },
   toolbar: { flexDirection: 'row', gap: 8 },
   search: {

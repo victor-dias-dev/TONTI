@@ -15,7 +15,7 @@ User B → the same, isolated
 
 This is not multi-tenant B2B. Household / shared accounts may appear later; do not encode that model now, and do not block it.
 
-Categories are copied per user (`is_system` marks the defaults). There is no global category catalog.
+Categories are copied per user (`is_system` marks the defaults). There is no global category catalog. A cash wallet (`Carteira`) is created with the user so transactions can be recorded before a bank is connected.
 
 ## Overview
 
@@ -89,19 +89,29 @@ Users are soft-deleted (`deleted_at`). Cascade only runs on a hard delete. Deact
 
 Identity and display preferences.
 
-| Column          | Type          | Notes                                          |
-| --------------- | ------------- | ---------------------------------------------- |
-| `id`            | `UUID` PK     |                                                |
-| `name`          | `TEXT`        |                                                |
-| `email`         | `TEXT`        | Unique                                         |
-| `password_hash` | `TEXT`        | Argon2                                         |
-| `avatar_url`    | `TEXT`        | Optional                                       |
-| `currency`      | `CHAR(3)`     | Default `BRL`                                  |
-| `locale`        | `TEXT`        | Default `pt-BR`                                |
-| `timezone`      | `TEXT`        | Default `America/Sao_Paulo`                    |
-| `created_at`    | `TIMESTAMPTZ` |                                                |
-| `updated_at`    | `TIMESTAMPTZ` |                                                |
-| `deleted_at`    | `TIMESTAMPTZ` | Soft delete. Soft-deleted users cannot log in. |
+| Column                  | Type               | Notes                                          |
+| ----------------------- | ------------------ | ---------------------------------------------- |
+| `id`                    | `UUID` PK          |                                                |
+| `name`                  | `TEXT`             |                                                |
+| `email`                 | `TEXT`             | Unique                                         |
+| `password_hash`         | `TEXT`             | Argon2                                         |
+| `avatar_url`            | `TEXT`             | Optional                                       |
+| `currency`              | `CHAR(3)`          | Default `BRL`                                  |
+| `locale`                | `TEXT`             | Default `pt-BR`                                |
+| `timezone`              | `TEXT`             | Default `America/Sao_Paulo`                    |
+| `theme`                 | `theme_preference` | `SYSTEM`, `LIGHT`, `DARK`. Default `SYSTEM`    |
+| `hide_balances`         | `BOOLEAN`          | Default `false`                                |
+| `period_start_day`      | `INTEGER`          | 1–28. Default `1`                              |
+| `notifications_enabled` | `BOOLEAN`          | Default `true`                                 |
+| `notify_bills`          | `BOOLEAN`          | Default `true`                                 |
+| `notify_invoices`       | `BOOLEAN`          | Default `true`                                 |
+| `notify_budgets`        | `BOOLEAN`          | Default `false`                                |
+| `notify_unusual`        | `BOOLEAN`          | Default `true`                                 |
+| `notify_goals`          | `BOOLEAN`          | Default `false`                                |
+| `notify_low_balance`    | `BOOLEAN`          | Default `true`                                 |
+| `created_at`            | `TIMESTAMPTZ`      |                                                |
+| `updated_at`            | `TIMESTAMPTZ`      |                                                |
+| `deleted_at`            | `TIMESTAMPTZ`      | Soft delete. Soft-deleted users cannot log in. |
 
 ### `refresh_tokens`
 
@@ -234,6 +244,7 @@ Recurring charges. Generating the actual ledger row is application work; this ta
 | `goal_status`            | `ACTIVE`, `COMPLETED`, `CANCELLED`           |
 | `subscription_frequency` | `WEEKLY`, `MONTHLY`, `QUARTERLY`, `YEARLY`   |
 | `subscription_status`    | `ACTIVE`, `PAUSED`, `CANCELLED`              |
+| `theme_preference`       | `SYSTEM`, `LIGHT`, `DARK`                    |
 
 ## Indexes
 
@@ -260,3 +271,4 @@ Enforced in PostgreSQL (not in the Prisma schema):
 - `transactions.amount` / `subscriptions.amount` / `goals.target_amount`: `> 0`
 - `budgets.amount` / `goals.current_amount`: `>= 0`
 - `budgets.month`: day of month is `1`
+- `users.period_start_day`: 1–28

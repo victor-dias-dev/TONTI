@@ -60,6 +60,23 @@ describe('AccountsService', () => {
     });
   });
 
+  it('creates a cash wallet when the user has no accounts', async () => {
+    const wallet: Account = { ...account, name: 'Carteira', type: AccountType.CASH };
+    repository.findBankAccounts.mockResolvedValueOnce([]);
+    repository.create.mockResolvedValue(wallet);
+
+    const result = await service.list(account.userId);
+
+    expect(repository.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: account.userId,
+        name: 'Carteira',
+        type: AccountType.CASH,
+      }),
+    );
+    expect(result[0]).toMatchObject({ name: 'Carteira', kind: 'cash' });
+  });
+
   it('deactivates accounts that still have transactions', async () => {
     repository.findByIdAndUser.mockResolvedValue(account);
     repository.countTransactions.mockResolvedValue(2);

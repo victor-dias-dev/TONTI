@@ -1,7 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 import type { UpcomingPayment } from '../domain';
 import { formatMoney } from '../domain';
-import { colors, radius } from '../theme';
+import { radius } from '../theme';
+import { useThemeScheme } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -11,9 +12,19 @@ interface UpcomingPaymentRowProps {
 }
 
 export function UpcomingPaymentRow({ payment, last }: UpcomingPaymentRowProps) {
+  const { colors, hideBalances, currency } = useThemeScheme();
+  void hideBalances;
+  void currency;
   return (
-    <View style={[styles.row, last ? null : styles.border]}>
-      <View style={styles.icon}>
+    <View
+      style={[
+        styles.row,
+        last
+          ? null
+          : { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
+      ]}
+    >
+      <View style={[styles.icon, { backgroundColor: colors.primarySoft }]}>
         <Icon name={payment.icon} size={16} color={colors.primary} />
       </View>
       <View style={styles.body}>
@@ -35,15 +46,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
-  border: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
-  },
   icon: {
     width: 40,
     height: 40,
     borderRadius: radius.pill,
-    backgroundColor: colors.primarySoft,
     alignItems: 'center',
     justifyContent: 'center',
   },

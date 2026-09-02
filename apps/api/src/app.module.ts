@@ -14,10 +14,10 @@ import { BudgetsModule } from './modules/budgets/budgets.module';
 import { CreditCardsModule } from './modules/credit-cards/credit-cards.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ProfileModule } from './modules/profile/profile.module';
+import { PreferencesModule } from './modules/preferences/preferences.module';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
 import { InstallmentsModule } from './modules/installments/installments.module';
 import { AssistantModule } from './modules/assistant/assistant.module';
-import { OpenFinanceModule } from './modules/open-finance/open-finance.module';
 import { HealthModule } from './health/health.module';
 import { DatabaseModule } from './database/database.module';
 import { RedisModule } from './redis/redis.module';
@@ -92,10 +92,10 @@ import { validateEnv } from './config/env.validation';
     CreditCardsModule,
     DashboardModule,
     ProfileModule,
+    PreferencesModule,
     SubscriptionsModule,
     InstallmentsModule,
     AssistantModule,
-    OpenFinanceModule,
     HealthModule,
   ],
   providers: [

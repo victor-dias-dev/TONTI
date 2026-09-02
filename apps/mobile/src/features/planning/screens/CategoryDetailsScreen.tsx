@@ -94,7 +94,7 @@ export function CategoryDetailsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 16 },
   metrics: { flexDirection: 'row', marginVertical: 16 },
   metric: { flex: 1, gap: 4 },

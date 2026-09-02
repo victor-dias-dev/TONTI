@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import type { Budget, Category } from '../domain';
 import { formatMoney, percentOf } from '../domain';
-import { colors, radius } from '../theme';
+import { radius } from '../theme';
+import { useThemeScheme } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 import { ProgressBar } from './ProgressBar';
@@ -13,6 +14,9 @@ interface CategoryBudgetRowProps {
 }
 
 export function CategoryBudgetRow({ budget, category, onPress }: CategoryBudgetRowProps) {
+  const { colors, hideBalances, currency } = useThemeScheme();
+  void hideBalances;
+  void currency;
   const percent = percentOf(budget.spentCents, budget.plannedCents);
   const tone = percent > 100 ? 'danger' : percent >= 85 ? 'warning' : 'primary';
 
@@ -21,7 +25,11 @@ export function CategoryBudgetRow({ budget, category, onPress }: CategoryBudgetR
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={category?.name ?? 'Categoria'}
-      style={({ pressed }) => [styles.card, pressed ? styles.pressed : null]}
+      style={({ pressed }) => [
+        styles.card,
+        { backgroundColor: colors.surface },
+        pressed ? styles.pressed : null,
+      ]}
     >
       <View style={styles.top}>
         <View style={styles.left}>
@@ -46,7 +54,6 @@ export function CategoryBudgetRow({ budget, category, onPress }: CategoryBudgetR
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 16,
     gap: 12,

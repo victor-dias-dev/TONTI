@@ -13,6 +13,6 @@ import { UsersService } from './users.service';
       useClass: PrismaUsersRepository,
     },
   ],
-  exports: [UsersService, PasswordService],
+  exports: [UsersService, PasswordService, UsersRepository],
 })
 export class UsersModule {}

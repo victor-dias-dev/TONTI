@@ -9,6 +9,9 @@ export function getErrorMessage(error: unknown): string {
       if (typeof message === 'string' && message.length > 0) {
         return message;
       }
+      if (Array.isArray(message) && typeof message[0] === 'string' && message[0].length > 0) {
+        return message[0];
+      }
     }
   }
 

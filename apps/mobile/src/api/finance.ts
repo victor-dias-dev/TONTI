@@ -4,15 +4,14 @@ import type {
   AiConversation,
   Card,
   Category,
-  ConnectBenefit,
   Dashboard,
   InstallmentPlan,
-  Institution,
   Invoice,
   PlanningSummary,
   Profile,
   SubscriptionsSummary,
   Transaction,
+  UserPreferences,
 } from '../domain';
 import { apiClient } from './client';
 
@@ -21,8 +20,20 @@ export const financeApi = {
     return get<Profile>('/profile');
   },
 
-  updateProfile(payload: Partial<Pick<Profile, 'name'>>) {
+  updateProfile(payload: Partial<Pick<Profile, 'name' | 'email'>>) {
     return patch<Profile>('/profile', payload);
+  },
+
+  changePassword(payload: { currentPassword: string; newPassword: string }) {
+    return apiClient.post('/profile/password', payload).then(() => undefined);
+  },
+
+  getPreferences() {
+    return get<UserPreferences>('/preferences');
+  },
+
+  updatePreferences(payload: Partial<UserPreferences>) {
+    return patch<UserPreferences>('/preferences', payload);
   },
 
   getDashboard() {
@@ -41,8 +52,16 @@ export const financeApi = {
     return get<Transaction[]>(`/transactions/${id}/related`);
   },
 
-  createTransaction(payload: Omit<Transaction, 'id'>) {
+  createTransaction(payload: Omit<Transaction, 'id'> & { installmentCount?: number }) {
     return post<Transaction>('/transactions', payload);
+  },
+
+  updateTransaction(id: string, payload: Partial<Omit<Transaction, 'id'>>) {
+    return patch<Transaction>(`/transactions/${id}`, payload);
+  },
+
+  deleteTransaction(id: string) {
+    return apiClient.delete(`/transactions/${id}`).then(() => undefined);
   },
 
   getAccounts() {
@@ -69,6 +88,17 @@ export const financeApi = {
     return get<Card>(`/credit-cards/${id}`);
   },
 
+  createCard(payload: {
+    name: string;
+    brand: string;
+    lastDigits: string;
+    limitCents: string;
+    closingDay: number;
+    dueDay: number;
+  }) {
+    return post<Card>('/credit-cards', payload);
+  },
+
   getInvoiceByCard(cardId: string) {
     return get<Invoice>(`/credit-cards/${cardId}/invoices/current`);
   },
@@ -81,8 +111,26 @@ export const financeApi = {
     return get<Category[]>('/categories');
   },
 
+  createCategory(
+    payload: Pick<Category, 'name' | 'icon' | 'iconBg'> & { type: NonNullable<Category['type']> },
+  ) {
+    return post<Category>('/categories', payload);
+  },
+
+  updateCategory(id: string, payload: Partial<Pick<Category, 'name' | 'icon' | 'iconBg'>>) {
+    return patch<Category>(`/categories/${id}`, payload);
+  },
+
+  deleteCategory(id: string) {
+    return apiClient.delete(`/categories/${id}`).then(() => undefined);
+  },
+
   getPlanning() {
     return get<PlanningSummary>('/budgets');
+  },
+
+  createBudget(payload: { categoryId: string; month: string; amountCents: string }) {
+    return post<PlanningSummary['budgets'][number]>('/budgets', payload);
   },
 
   getCategoryTransactions(categoryId: string) {
@@ -101,20 +149,23 @@ export const financeApi = {
     return get<SubscriptionsSummary>('/subscriptions');
   },
 
+  createSubscription(payload: {
+    name: string;
+    amountCents: string;
+    accountId: string;
+    categoryId: string;
+    frequency: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
+    nextChargeDate: string;
+  }) {
+    return post<SubscriptionsSummary['items'][number]>('/subscriptions', payload);
+  },
+
   getInstallments() {
     return get<InstallmentPlan[]>('/installments');
   },
 
   getInstallment(id: string) {
     return get<InstallmentPlan>(`/installments/${id}`);
-  },
-
-  getConnectBenefits() {
-    return get<ConnectBenefit[]>('/open-finance/benefits');
-  },
-
-  getInstitutions(q?: string) {
-    return get<Institution[]>('/open-finance/institutions', q ? { q } : undefined);
   },
 };
 

@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import type { Account } from '../domain';
-import { formatMoney } from '../domain';
-import { colors, radius, shadows } from '../theme';
+import { formatMoney, isNegativeMoney } from '../domain';
+import { radius, shadows } from '../theme';
+import { useThemeScheme } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -11,17 +12,24 @@ interface AccountCardProps {
 }
 
 export function AccountCard({ account, onPress }: AccountCardProps) {
+  const { colors, hideBalances, currency } = useThemeScheme();
+  void hideBalances;
+  void currency;
   const caption = account.kind === 'cash' ? 'Carteira' : 'Saldo disponível';
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={account.name}
-      style={({ pressed }) => [styles.card, pressed ? styles.pressed : null]}
+      style={({ pressed }) => [
+        styles.card,
+        { backgroundColor: colors.surface },
+        pressed ? styles.pressed : null,
+      ]}
     >
       <View style={styles.top}>
         <View style={styles.identity}>
-          <View style={styles.icon}>
+          <View style={[styles.icon, { backgroundColor: colors.surfaceMuted }]}>
             <Icon name={account.icon} size={18} color={colors.primary} />
           </View>
           <AppText variant="label">{account.name}</AppText>
@@ -32,8 +40,11 @@ export function AccountCard({ account, onPress }: AccountCardProps) {
         <AppText variant="caption" color={colors.muted}>
           {caption}
         </AppText>
-        <AppText variant="titleSm" color={colors.primary}>
-          {formatMoney(account.balanceCents, { sign: 'never' })}
+        <AppText
+          variant="titleSm"
+          color={isNegativeMoney(account.balanceCents) ? colors.danger : colors.primary}
+        >
+          {formatMoney(account.balanceCents, { sign: 'auto' })}
         </AppText>
       </View>
     </Pressable>
@@ -42,7 +53,6 @@ export function AccountCard({ account, onPress }: AccountCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surface,
     borderRadius: radius.md,
     padding: 20,
     gap: 16,
@@ -56,7 +66,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: radius.pill,
-    backgroundColor: colors.surfaceMuted,
     alignItems: 'center',
     justifyContent: 'center',
   },

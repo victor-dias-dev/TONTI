@@ -10,6 +10,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isHydrated: boolean;
   setSession: (token: string, user: PublicUser) => Promise<void>;
+  updateUser: (user: PublicUser) => void;
   clearSession: () => Promise<void>;
   restoreSession: () => Promise<void>;
 }
@@ -24,6 +25,10 @@ export const useAuthStore = create<AuthState>((set) => ({
     sessionToken.set(token);
     await tokenStorage.set(token);
     set({ token, user, isAuthenticated: true, isHydrated: true });
+  },
+
+  updateUser: (user) => {
+    set({ user });
   },
 
   clearSession: async () => {

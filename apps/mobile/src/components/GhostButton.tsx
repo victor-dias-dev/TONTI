@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native';
-import { colors, radius } from '../theme';
+import { radius } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 import type { IconName } from '../domain';
@@ -17,12 +18,17 @@ export function GhostButton({
   icon = 'plus',
   accessibilityLabel,
 }: GhostButtonProps) {
+  const colors = useColors();
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? label}
-      style={({ pressed }) => [styles.button, pressed ? styles.pressed : null]}
+      style={({ pressed }) => [
+        styles.button,
+        { borderColor: colors.border },
+        pressed ? styles.pressed : null,
+      ]}
     >
       <Icon name={icon} size={14} color={colors.primary} />
       <AppText variant="label" color={colors.primary}>
@@ -37,7 +43,6 @@ const styles = StyleSheet.create({
     minHeight: 56,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',

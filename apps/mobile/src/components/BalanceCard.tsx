@@ -1,7 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 import type { MoneyCents } from '../domain';
-import { formatMoney } from '../domain';
-import { colors, radius, shadows } from '../theme';
+import { formatMoney, isNegativeMoney } from '../domain';
+import { radius, shadows } from '../theme';
+import { useThemeScheme } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -12,8 +13,12 @@ interface BalanceCardProps {
 }
 
 export function BalanceCard({ label = 'Saldo disponível', cents, badge }: BalanceCardProps) {
+  const { colors, hideBalances, currency } = useThemeScheme();
+  void hideBalances;
+  void currency;
+  const negative = isNegativeMoney(cents);
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: colors.surface }]}>
       <View style={styles.top}>
         <View style={styles.label}>
           <Icon name="bank" size={16} color={colors.muted} />
@@ -22,7 +27,7 @@ export function BalanceCard({ label = 'Saldo disponível', cents, badge }: Balan
           </AppText>
         </View>
         {badge ? (
-          <View style={styles.badge}>
+          <View style={[styles.badge, { backgroundColor: colors.primarySoft }]}>
             <Icon name="arrowUp" size={12} color={colors.primaryMuted} />
             <AppText variant="label" color={colors.primaryMuted}>
               {badge}
@@ -30,8 +35,8 @@ export function BalanceCard({ label = 'Saldo disponível', cents, badge }: Balan
           </View>
         ) : null}
       </View>
-      <AppText variant="display" color={colors.primary}>
-        {formatMoney(cents, { sign: 'never' })}
+      <AppText variant="display" color={negative ? colors.danger : colors.primary}>
+        {formatMoney(cents, { sign: 'auto' })}
       </AppText>
     </View>
   );
@@ -39,7 +44,6 @@ export function BalanceCard({ label = 'Saldo disponível', cents, badge }: Balan
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surface,
     borderRadius: radius.md,
     padding: 20,
     overflow: 'hidden',
@@ -48,7 +52,6 @@ const styles = StyleSheet.create({
   top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   label: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   badge: {
-    backgroundColor: colors.primarySoft,
     borderRadius: 999,
     paddingHorizontal: 8,
     paddingVertical: 4,

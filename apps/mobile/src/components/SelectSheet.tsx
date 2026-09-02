@@ -1,5 +1,6 @@
-import { Modal, Pressable, StyleSheet } from 'react-native';
-import { colors, radius } from '../theme';
+import { Modal, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { radius } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 
 interface SelectOption {
@@ -24,6 +25,7 @@ export function SelectSheet({
   onSelect,
   onClose,
 }: SelectSheetProps) {
+  const colors = useColors();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable
@@ -32,30 +34,38 @@ export function SelectSheet({
         accessibilityRole="button"
         accessibilityLabel="Fechar"
       >
-        <Pressable style={styles.sheet} onPress={() => undefined}>
+        <Pressable
+          style={[styles.sheet, { backgroundColor: colors.surface }]}
+          onPress={() => undefined}
+        >
           <AppText variant="titleSm" color={colors.primary} style={styles.title}>
             {title}
           </AppText>
-          {options.map((option) => {
-            const selected = option.id === selectedId;
-            return (
-              <Pressable
-                key={option.id}
-                onPress={() => {
-                  onSelect(option.id);
-                  onClose();
-                }}
-                accessibilityRole="button"
-                accessibilityState={{ selected }}
-                accessibilityLabel={option.label}
-                style={[styles.option, selected ? styles.selected : null]}
-              >
-                <AppText variant="body" color={selected ? colors.primary : colors.text}>
-                  {option.label}
-                </AppText>
-              </Pressable>
-            );
-          })}
+          <ScrollView style={styles.list} keyboardShouldPersistTaps="handled">
+            {options.map((option) => {
+              const selected = option.id === selectedId;
+              return (
+                <Pressable
+                  key={option.id}
+                  onPress={() => {
+                    onSelect(option.id);
+                    onClose();
+                  }}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected }}
+                  accessibilityLabel={option.label}
+                  style={[
+                    styles.option,
+                    selected ? { backgroundColor: colors.primarySoft50 } : null,
+                  ]}
+                >
+                  <AppText variant="body" color={selected ? colors.primary : colors.text}>
+                    {option.label}
+                  </AppText>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
         </Pressable>
       </Pressable>
     </Modal>
@@ -69,19 +79,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: colors.surface,
     borderTopLeftRadius: radius.lg,
     borderTopRightRadius: radius.lg,
     padding: 20,
     gap: 8,
   },
   title: { marginBottom: 8 },
+  list: { maxHeight: 360 },
   option: {
     paddingVertical: 14,
     paddingHorizontal: 12,
     borderRadius: radius.md,
-  },
-  selected: {
-    backgroundColor: colors.primarySoft50,
   },
 });

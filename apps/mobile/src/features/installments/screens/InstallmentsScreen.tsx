@@ -101,7 +101,7 @@ function sumCents(values: MoneyCents[]): MoneyCents {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 16 },
   summary: { flexDirection: 'row', gap: 8 },
   tile: { flex: 1, alignItems: 'center', gap: 4 },

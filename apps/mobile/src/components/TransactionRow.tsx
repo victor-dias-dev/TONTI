@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import type { Category, Transaction } from '../domain';
 import { formatMoney } from '../domain';
-import { colors, radius } from '../theme';
+import { radius } from '../theme';
+import { useThemeScheme } from '../theme';
 import { AppText } from './AppText';
 import { CategoryChip } from './CategoryChip';
 import { Icon } from './Icon';
@@ -23,6 +24,9 @@ export function TransactionRow({
   showTime,
   onPress,
 }: TransactionRowProps) {
+  const { colors, hideBalances, currency } = useThemeScheme();
+  void hideBalances;
+  void currency;
   const income = transaction.type === 'income';
   const time = new Date(transaction.occurredAt).toLocaleTimeString('pt-BR', {
     hour: '2-digit',
@@ -39,7 +43,8 @@ export function TransactionRow({
       accessibilityLabel={`${transaction.description} ${display}`}
       style={({ pressed }) => [
         styles.row,
-        income ? styles.income : null,
+        { backgroundColor: colors.surface },
+        income ? { borderLeftWidth: 4, borderLeftColor: colors.primary } : null,
         pressed ? styles.pressed : null,
       ]}
     >
@@ -88,11 +93,6 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 12,
     paddingVertical: 12,
-    backgroundColor: colors.surface,
-  },
-  income: {
-    borderLeftWidth: 4,
-    borderLeftColor: colors.primary,
   },
   pressed: { opacity: 0.7 },
   icon: {

@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import {
   AppText,
   Card,
@@ -13,26 +13,54 @@ import { formatMoney } from '../../../domain';
 import {
   useAccounts,
   useCategories,
+  useDeleteTransaction,
   useRelatedTransactions,
   useTransaction,
 } from '../../../hooks/use-finance';
-import { colors, radius } from '../../../theme';
+import { radius, useColors } from '../../../theme';
+import { getErrorMessage } from '../../../utils/error-message';
 import { findAccount, findCategory } from '../../../utils/lookups';
 
 export function TransactionDetailsScreen() {
+  const colors = useColors();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const transactionQuery = useTransaction(id ?? '');
-  const related = useRelatedTransactions(id ?? '');
+  const transactionId = id ?? '';
+  const transactionQuery = useTransaction(transactionId);
+  const related = useRelatedTransactions(transactionId);
   const categories = useCategories();
   const accounts = useAccounts();
+  const remove = useDeleteTransaction();
   const transaction = transactionQuery.data;
   const category = transaction ? findCategory(categories.data, transaction.categoryId) : undefined;
   const account = transaction ? findAccount(accounts.data, transaction.accountId) : undefined;
   const income = transaction?.type === 'income';
 
+  function confirmDelete() {
+    if (!transactionId) return;
+    Alert.alert('Excluir transação', 'Esta ação não pode ser desfeita.', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Excluir',
+        style: 'destructive',
+        onPress: () =>
+          remove.mutate(transactionId, {
+            onSuccess: () => router.replace('/(app)/transactions'),
+          }),
+      },
+    ]);
+  }
+
   return (
-    <View style={styles.safe}>
-      <StackHeader title="Detalhes" onBack={() => router.back()} />
+    <View style={[styles.safe, { backgroundColor: colors.background }]}>
+      <StackHeader
+        title="Detalhes"
+        onBack={() => router.back()}
+        rightLabel={transaction ? 'Editar' : undefined}
+        rightIcon="edit"
+        onRightPress={
+          transaction ? () => router.push(`/transaction/${transaction.id}/edit`) : undefined
+        }
+      />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {transaction ? (
           <>
@@ -86,9 +114,28 @@ export function TransactionDetailsScreen() {
               </View>
             ) : null}
 
-            <View style={styles.illustration}>
-              <Icon name={category?.icon ?? 'food'} size={64} color={colors.primarySoft} />
-            </View>
+            {remove.error ? (
+              <AppText variant="caption" color={colors.danger}>
+                {getErrorMessage(remove.error)}
+              </AppText>
+            ) : null}
+
+            <Pressable
+              onPress={confirmDelete}
+              disabled={remove.isPending}
+              accessibilityRole="button"
+              accessibilityLabel="Excluir transação"
+              style={({ pressed }) => [
+                styles.delete,
+                { backgroundColor: colors.dangerSoft20 },
+                pressed ? styles.pressed : null,
+              ]}
+            >
+              <Icon name="trash" size={18} color={colors.danger} />
+              <AppText variant="label" color={colors.danger}>
+                Excluir transação
+              </AppText>
+            </Pressable>
           </>
         ) : transactionQuery.isError ? (
           <InsightBanner text="Transação não encontrada." />
@@ -99,8 +146,14 @@ export function TransactionDetailsScreen() {
 }
 
 function DetailRow({ label, value, last }: { label: string; value: string; last?: boolean }) {
+  const colors = useColors();
   return (
-    <View style={[styles.detail, last ? null : styles.detailBorder]}>
+    <View
+      style={[
+        styles.detail,
+        last ? null : [styles.detailBorder, { borderBottomColor: colors.chip }],
+      ]}
+    >
       <AppText variant="caption" color={colors.muted}>
         {label}
       </AppText>
@@ -118,7 +171,7 @@ function formatDateTime(iso: string) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 20 },
   hero: { alignItems: 'center', gap: 8, paddingTop: 8 },
   icon: {
@@ -130,12 +183,16 @@ const styles = StyleSheet.create({
   },
   section: { marginBottom: 12 },
   detail: { paddingVertical: 12, gap: 4 },
-  detailBorder: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.chip },
-  illustration: {
-    height: 160,
-    borderRadius: 32,
-    backgroundColor: colors.surface,
+  detailBorder: { borderBottomWidth: StyleSheet.hairlineWidth },
+  delete: {
+    alignSelf: 'center',
+    marginTop: 8,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: radius.pill,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: 8,
   },
+  pressed: { opacity: 0.85 },
 });

@@ -1,4 +1,73 @@
-import type { Account, Category, Transaction } from '../domain';
+import type { Account, Category, IconName, Transaction } from '../domain';
+
+const ICON_NAMES: readonly IconName[] = [
+  'home',
+  'transactions',
+  'planning',
+  'accounts',
+  'more',
+  'bell',
+  'plus',
+  'search',
+  'filter',
+  'chevronLeft',
+  'chevronRight',
+  'chevronDown',
+  'close',
+  'check',
+  'bank',
+  'wallet',
+  'card',
+  'cash',
+  'food',
+  'transport',
+  'market',
+  'homeCategory',
+  'leisure',
+  'income',
+  'subscription',
+  'flag',
+  'bulb',
+  'arrowUp',
+  'arrowDown',
+  'user',
+  'grid',
+  'settings',
+  'lock',
+  'crown',
+  'help',
+  'logout',
+  'edit',
+  'calendar',
+  'repeat',
+  'installments',
+  'robot',
+  'savings',
+  'mic',
+  'send',
+  'play',
+  'music',
+  'truck',
+  'sync',
+  'sparkle',
+  'pieChart',
+  'shield',
+  'link',
+  'eyeOff',
+  'trash',
+  'headset',
+  'rocket',
+  'exchange',
+];
+
+const ICON_NAME_SET = new Set<string>(ICON_NAMES);
+
+export function asIconName(value: string | undefined, fallback: IconName = 'grid'): IconName {
+  if (value && ICON_NAME_SET.has(value)) {
+    return value as IconName;
+  }
+  return fallback;
+}
 
 export function findCategory(categories: Category[] | undefined, id: string) {
   return categories?.find((item) => item.id === id);

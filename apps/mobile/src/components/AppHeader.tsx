@@ -1,6 +1,7 @@
+import { router } from 'expo-router';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -12,14 +13,15 @@ interface AppHeaderProps {
 
 export function AppHeader({ onPressNotifications }: AppHeaderProps) {
   const insets = useSafeAreaInsets();
+  const colors = useColors();
   return (
-    <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
+    <View style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: colors.overlay }]}>
       <Image source={avatar} style={styles.avatar} accessibilityLabel="Foto de perfil" />
       <AppText variant="titleMd" color={colors.primary} style={styles.title}>
         Tonti
       </AppText>
       <Pressable
-        onPress={onPressNotifications}
+        onPress={onPressNotifications ?? (() => router.push('/(app)/more/notifications'))}
         accessibilityRole="button"
         accessibilityLabel="Notificações"
         style={styles.bell}
@@ -37,7 +39,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingBottom: 12,
-    backgroundColor: colors.overlay,
   },
   avatar: {
     width: 40,

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Perfil - Tonti</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#191c1d",
+                        "tertiary": "#705d00",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#c8a900",
+                        "inverse-primary": "#94d3c1",
+                        "tertiary-fixed-dim": "#e9c400",
+                        "primary-fixed-dim": "#94d3c1",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#bbe8e4",
+                        "inverse-on-surface": "#eff1f1",
+                        "secondary": "#3b6663",
+                        "surface-variant": "#e1e3e3",
+                        "on-primary-fixed": "#00201a",
+                        "on-tertiary-container": "#4b3e00",
+                        "tertiary-fixed": "#ffe16d",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2e3131",
+                        "on-secondary-container": "#3f6a67",
+                        "surface-container-highest": "#e1e3e3",
+                        "on-primary-fixed-variant": "#065043",
+                        "surface-bright": "#f8fafa",
+                        "on-tertiary-fixed": "#221b00",
+                        "on-primary-container": "#7ebdac",
+                        "on-surface-variant": "#3f4945",
+                        "on-tertiary-fixed-variant": "#544600",
+                        "on-secondary-fixed": "#00201e",
+                        "secondary-fixed-dim": "#a2cfcb",
+                        "primary-fixed": "#afefdd",
+                        "on-error-container": "#93000a",
+                        "surface": "#f8fafa",
+                        "outline-variant": "#bfc9c4",
+                        "surface-container": "#eceeee",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "outline": "#707975",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "surface-container-low": "#f2f4f4",
+                        "primary-container": "#004d40",
+                        "surface-dim": "#d8dada",
+                        "primary": "#00342b",
+                        "secondary-fixed": "#beebe7",
+                        "surface-tint": "#29695b",
+                        "surface-container-high": "#e6e8e8",
+                        "on-secondary-fixed-variant": "#224e4b",
+                        "background": "#f8fafa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-padding": "32px",
+                        "element-gap": "8px",
+                        "container-margin": "20px",
+                        "stack-gap": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Hanken Grotesk"],
+                        "currency-md": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-sm": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "balance-display": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "currency-md": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "balance-display": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .tonti-glow {
+            box-shadow: 0px 8px 24px rgba(0, 77, 64, 0.08);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col pt-[72px]">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md flex justify-between items-center w-full px-container-margin py-stack-gap fixed top-0 left-0 z-50">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-primary dark:text-primary-fixed-dim hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/50 transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Perfil</h1>
+<div class="w-10 h-10"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-container-margin py-stack-gap flex flex-col gap-6 max-w-md mx-auto w-full">
+<!-- User Avatar & Info Card -->
+<div class="bg-surface-container-lowest rounded-[16px] p-[20px] tonti-glow flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-4 border-surface-container-lowest shadow-sm">
+<img alt="Profile Picture" class="w-full h-full object-cover" data-alt="A professional, modern headshot of a young Brazilian woman, Ana Silva. She has a warm, confident expression. The lighting is soft and studio-quality, emphasizing a premium, trustworthy aesthetic suitable for a high-end financial app profile. The background is a subtle, solid light grey to keep the focus on her face." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_v71ciIwFywrheSEC2ZkFIGosnqIXAOtx4q_FiyUINRswNGke8ZkYqhHpUjKunjJCPmZXWD_LyNDGjFXE5Y1uaOJgavftYUHxxTEVL3ywkg72AbBA6Jyz6oiP0EFtYkISN4BNE9YDgG3Q3rK7N0HpGp6rppadiGBL7Y0ld0sZwSbfKEulPfEyFlYi0Wi82Bzv8CX-om0NgEW-OkI0Rc5RwR5TD_NcGDOXZJudir4S7h7Xweq-w16Ovw"/>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-1">Ana Silva</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">ana.silva@email.com</p>
+</div>
+<!-- Actions List -->
+<div class="flex flex-col gap-4">
+<button class="bg-surface-container-lowest rounded-[16px] p-[20px] tonti-glow flex items-center justify-between hover:bg-surface-container-low transition-colors w-full text-left">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="person_edit">person_edit</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Editar perfil</h3>
+<p class="font-body-sm text-sm text-on-surface-variant">Atualize suas informações</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="bg-surface-container-lowest rounded-[16px] p-[20px] tonti-glow flex items-center justify-between hover:bg-surface-container-low transition-colors w-full text-left">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="lock_reset">lock_reset</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Alterar senha</h3>
+<p class="font-body-sm text-sm text-on-surface-variant">Mantenha sua conta segura</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Logout Action -->
+<div class="mt-auto pt-8 pb-4">
+<button class="bg-surface-container-lowest border border-error-container rounded-[24px] h-[56px] w-full flex items-center justify-center gap-2 text-error hover:bg-error-container/20 transition-colors">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Sair</span>
+</button>
+</div>
+</main>
+</body></html>

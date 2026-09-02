@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
-import { colors, radius } from '../theme';
+import { radius } from '../theme';
+import { useColors } from '../theme';
 import { AppText } from './AppText';
 import { Icon } from './Icon';
 
@@ -8,8 +9,9 @@ interface InsightBannerProps {
 }
 
 export function InsightBanner({ text }: InsightBannerProps) {
+  const colors = useColors();
   return (
-    <View style={styles.banner}>
+    <View style={[styles.banner, { backgroundColor: colors.primarySoft }]}>
       <Icon name="bulb" size={18} color={colors.primary} />
       <AppText variant="label" color={colors.primaryInk} style={styles.text}>
         {text}
@@ -20,7 +22,6 @@ export function InsightBanner({ text }: InsightBannerProps) {
 
 const styles = StyleSheet.create({
   banner: {
-    backgroundColor: colors.primarySoft,
     borderRadius: radius.md,
     padding: 16,
     flexDirection: 'row',

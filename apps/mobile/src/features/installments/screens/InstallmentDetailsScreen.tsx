@@ -28,7 +28,7 @@ export function InstallmentDetailsScreen() {
       <StackHeader
         title="Compra parcelada"
         onBack={() => router.back()}
-        onPressNotifications={() => undefined}
+        onPressNotifications={() => router.push('/(app)/more/notifications')}
       />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {plan ? (
@@ -160,7 +160,7 @@ function InstallmentRow({ item }: { item: Installment }) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 16, paddingTop: 8 },
   heroCard: { borderRadius: radius.xxl },
   round: { borderRadius: radius.xxl },

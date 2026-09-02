@@ -1,5 +1,6 @@
 import { Text, type TextProps, type TextStyle } from 'react-native';
-import { colors, typography } from '../theme';
+import { typography } from '../theme';
+import { useColors } from '../theme';
 
 type Variant = keyof typeof typography;
 
@@ -11,14 +12,18 @@ interface AppTextProps extends TextProps {
 
 export function AppText({
   variant = 'body',
-  color = colors.text,
+  color,
   align,
   style,
   children,
   ...props
 }: AppTextProps) {
+  const colors = useColors();
   return (
-    <Text style={[typography[variant], { color, textAlign: align }, style]} {...props}>
+    <Text
+      style={[typography[variant], { color: color ?? colors.text, textAlign: align }, style]}
+      {...props}
+    >
       {children}
     </Text>
   );

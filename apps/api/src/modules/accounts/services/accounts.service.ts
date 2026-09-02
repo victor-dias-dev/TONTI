@@ -28,7 +28,17 @@ export class AccountsService {
   ) {}
 
   async list(userId: string): Promise<AccountResponseDto[]> {
-    const accounts = await this.accountsRepository.findBankAccounts(userId);
+    let accounts = await this.accountsRepository.findBankAccounts(userId);
+    if (accounts.length === 0) {
+      const wallet = await this.accountsRepository.create({
+        userId,
+        name: 'Carteira',
+        type: AccountType.CASH,
+        initialBalance: zeroDecimal(),
+        currentBalance: zeroDecimal(),
+      });
+      accounts = [wallet];
+    }
     return accounts.map((account) => this.toResponse(account));
   }
 

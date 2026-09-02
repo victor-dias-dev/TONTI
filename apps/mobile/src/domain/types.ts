@@ -55,13 +55,23 @@ export type IconName =
   | 'sparkle'
   | 'pieChart'
   | 'shield'
-  | 'link';
+  | 'link'
+  | 'eyeOff'
+  | 'trash'
+  | 'headset'
+  | 'rocket'
+  | 'exchange';
+
+export type CategoryKind = 'expense' | 'income';
 
 export interface Category {
   id: string;
   name: string;
   icon: IconName;
   iconBg: string;
+  type?: CategoryKind;
+  isSystem?: boolean;
+  transactionCount?: number;
 }
 
 export interface Account {
@@ -205,25 +215,6 @@ export interface SubscriptionsSummary {
   items: Subscription[];
 }
 
-export type InstitutionShape = 'circle' | 'rounded';
-
-export interface Institution {
-  id: string;
-  name: string;
-  initial: string;
-  brandColor: string;
-  textColor: string;
-  shape: InstitutionShape;
-  featured: boolean;
-}
-
-export interface ConnectBenefit {
-  id: string;
-  title: string;
-  description: string;
-  icon: IconName;
-}
-
 export type InstallmentStatus = 'paid' | 'next' | 'upcoming';
 
 export interface Installment {
@@ -248,4 +239,49 @@ export interface InstallmentPlan {
   remainingCount: number;
   remainingCents: MoneyCents;
   installments: Installment[];
+}
+
+export type NotificationTone = 'primary' | 'warning' | 'muted';
+export type NotificationGroup = 'today' | 'yesterday';
+
+export interface AppNotification {
+  id: string;
+  group: NotificationGroup;
+  title: string;
+  body: string;
+  timeLabel: string;
+  read: boolean;
+  icon: IconName;
+  tone: NotificationTone;
+  amountCents?: MoneyCents;
+  actor?: string;
+}
+
+export type ThemePreference = 'system' | 'light' | 'dark';
+
+export interface UserPreferences {
+  theme: ThemePreference;
+  hideBalances: boolean;
+  currency: string;
+  periodStartDay: number;
+  notificationsEnabled: boolean;
+  notifyBills: boolean;
+  notifyInvoices: boolean;
+  notifyBudgets: boolean;
+  notifyUnusual: boolean;
+  notifyGoals: boolean;
+  notifyLowBalance: boolean;
+}
+
+export interface HelpArticle {
+  id: string;
+  title: string;
+  body: string;
+}
+
+export interface HelpTopic {
+  id: string;
+  title: string;
+  icon: IconName;
+  articles: HelpArticle[];
 }

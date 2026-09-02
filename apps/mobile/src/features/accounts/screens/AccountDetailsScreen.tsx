@@ -43,7 +43,7 @@ export function AccountDetailsScreen() {
               <AppText variant="caption" color={colors.muted}>
                 Saldo
               </AppText>
-              <MoneyText cents={data.balanceCents} variant="display" color={colors.primary} />
+              <MoneyText cents={data.balanceCents} variant="display" sign="auto" />
             </View>
             <View style={styles.stats}>
               <StatTile label="Entradas" cents={incomeCents} icon="arrowDown" />
@@ -82,7 +82,7 @@ function addCents(left: string, right: string) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 16 },
   stats: { flexDirection: 'row', gap: 8 },
   section: { marginBottom: 12 },

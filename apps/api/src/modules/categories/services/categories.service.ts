@@ -1,25 +1,34 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { CategoryType, type Category } from '@prisma/client';
+import { financialMonthRange } from '../../../common/dates/zoned-time';
 import { AppException } from '../../../common/errors/app.exception';
 import { ErrorCode } from '../../../common/errors/error-codes';
+import { UsersService } from '../../users/users.service';
 import type { CreateCategoryDto, UpdateCategoryDto } from '../dto/create-category.dto';
 import { CategoryResponseDto } from '../dto/category-response.dto';
 import { CategoriesRepository } from '../repositories/categories.repository';
 
 @Injectable()
 export class CategoriesService {
-  constructor(private readonly categoriesRepository: CategoriesRepository) {}
+  constructor(
+    private readonly categoriesRepository: CategoriesRepository,
+    private readonly usersService: UsersService,
+  ) {}
 
   async list(userId: string, type?: 'income' | 'expense'): Promise<CategoryResponseDto[]> {
-    const categories = await this.categoriesRepository.findByUser(
-      userId,
-      type ? this.toCategoryType(type) : undefined,
-    );
-    return categories.map((category) => this.toResponse(category));
+    const [categories, counts] = await Promise.all([
+      this.categoriesRepository.findByUser(userId, type ? this.toCategoryType(type) : undefined),
+      this.monthCounts(userId),
+    ]);
+    return categories.map((category) => this.toResponse(category, counts.get(category.id) ?? 0));
   }
 
   async getById(userId: string, id: string): Promise<CategoryResponseDto> {
-    return this.toResponse(await this.requireOwned(userId, id));
+    const [category, counts] = await Promise.all([
+      this.requireOwned(userId, id),
+      this.monthCounts(userId),
+    ]);
+    return this.toResponse(category, counts.get(category.id) ?? 0);
   }
 
   async create(userId: string, dto: CreateCategoryDto): Promise<CategoryResponseDto> {
@@ -46,7 +55,7 @@ export class CategoriesService {
       color: dto.iconBg,
     });
 
-    return this.toResponse(category);
+    return this.toResponse(category, 0);
   }
 
   async update(userId: string, id: string, dto: UpdateCategoryDto): Promise<CategoryResponseDto> {
@@ -72,8 +81,8 @@ export class CategoriesService {
       icon: dto.icon,
       color: dto.iconBg,
     });
-
-    return this.toResponse(category);
+    const counts = await this.monthCounts(userId);
+    return this.toResponse(category, counts.get(category.id) ?? 0);
   }
 
   async remove(userId: string, id: string): Promise<void> {
@@ -99,14 +108,29 @@ export class CategoriesService {
     await this.categoriesRepository.delete(id);
   }
 
-  toResponse(category: Category): CategoryResponseDto {
+  toResponse(category: Category, transactionCount = 0): CategoryResponseDto {
     return {
       id: category.id,
       name: category.name,
       icon: category.icon,
       iconBg: category.color,
       type: category.type === CategoryType.INCOME ? 'income' : 'expense',
+      isSystem: category.isSystem,
+      transactionCount,
     };
+  }
+
+  private async monthCounts(userId: string): Promise<Map<string, number>> {
+    const user = await this.usersService.findById(userId);
+    const timeZone = user?.timezone ?? 'America/Sao_Paulo';
+    const periodStartDay = user?.periodStartDay ?? 1;
+    const range = financialMonthRange(new Date(), timeZone, periodStartDay);
+    const rows = await this.categoriesRepository.countTransactionsInRange(
+      userId,
+      range.start,
+      range.end,
+    );
+    return new Map(rows.map((row) => [row.categoryId, row.count]));
   }
 
   private async requireOwned(userId: string, id: string): Promise<Category> {

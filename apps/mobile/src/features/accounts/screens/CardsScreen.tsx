@@ -1,11 +1,12 @@
 import { router } from 'expo-router';
-import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { AppText, GhostButton, Icon, MoneyText, StackHeader } from '../../../components';
 import { formatMoney, percentOf } from '../../../domain';
 import { useCards } from '../../../hooks/use-finance';
-import { colors, radius, shadows } from '../../../theme';
+import { colors, radius, shadows, useColors } from '../../../theme';
 
 export function CardsScreen() {
+  const colors = useColors();
   const cards = useCards();
 
   return (
@@ -72,9 +73,7 @@ export function CardsScreen() {
 
         <GhostButton
           label="Adicionar Cartão"
-          onPress={() =>
-            Alert.alert('Em breve', 'O cadastro de cartões estará disponível em uma próxima etapa.')
-          }
+          onPress={() => router.push('/(app)/accounts/new-card')}
         />
       </ScrollView>
     </View>
@@ -82,7 +81,7 @@ export function CardsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 40, gap: 16 },
   card: {
     backgroundColor: colors.surface,

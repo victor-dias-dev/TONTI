@@ -5,7 +5,7 @@ import { Decimal } from '@prisma/client/runtime/library';
 import {
   addCalendarMonths,
   fromZonedCivil,
-  monthRange,
+  financialMonthRange,
   zonedCivilDate,
 } from '../../../common/dates/zoned-time';
 import { AppException } from '../../../common/errors/app.exception';
@@ -207,7 +207,11 @@ export class TransactionsService {
     const timeZone = user?.timezone ?? 'America/Sao_Paulo';
     const year = Number(match[1]);
     const month = Number(match[2]);
-    const { start, end } = monthRange(fromZonedCivil(year, month, 15, timeZone), timeZone);
+    const { start, end } = financialMonthRange(
+      fromZonedCivil(year, month, 15, timeZone),
+      timeZone,
+      user?.periodStartDay ?? 1,
+    );
     return { from: start, to: end };
   }
 

@@ -33,11 +33,12 @@ export class BudgetsService {
 
   async summary(userId: string, monthParam?: string): Promise<PlanningSummaryDto> {
     const { monthStart, range } = await this.resolveMonth(userId, monthParam);
-    const [budgets, totals, spentByCategory] = await Promise.all([
+    const [existing, totals, spentByCategory] = await Promise.all([
       this.budgetsRepository.findByUserAndMonth(userId, monthStart),
       this.transactionsRepository.sumByType(userId, range.start, range.end),
       this.transactionsRepository.sumExpensesByCategory(userId, range.start, range.end),
     ]);
+    const budgets = existing.length > 0 ? existing : await this.carryForward(userId, monthStart);
 
     const spentMap = new Map(spentByCategory.map((row) => [row.categoryId, row.amount]));
     const income =
@@ -175,6 +176,24 @@ export class BudgetsService {
       percentLabel: formatPercentLabel(spentCents, plannedCents),
       status,
     };
+  }
+
+  private async carryForward(userId: string, monthStart: Date) {
+    const previousMonth = await this.budgetsRepository.findLatestMonthBefore(userId, monthStart);
+    if (!previousMonth) {
+      return [];
+    }
+
+    const previous = await this.budgetsRepository.findByUserAndMonth(userId, previousMonth);
+    await this.budgetsRepository.createMany(
+      previous.map((budget) => ({
+        userId,
+        categoryId: budget.categoryId,
+        month: monthStart,
+        amount: budget.amount,
+      })),
+    );
+    return this.budgetsRepository.findByUserAndMonth(userId, monthStart);
   }
 
   private async resolveMonth(userId: string, monthParam?: string) {

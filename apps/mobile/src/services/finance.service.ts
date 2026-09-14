@@ -121,6 +121,10 @@ export const financeService = {
     return financeApi.createBudget(payload);
   },
 
+  deleteBudget(id: string): Promise<void> {
+    return financeApi.deleteBudget(id);
+  },
+
   getCategoryTransactions(categoryId: string): Promise<Transaction[]> {
     return financeApi.getCategoryTransactions(categoryId);
   },

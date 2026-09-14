@@ -5,12 +5,12 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "node ../../node_modules/typescript/bin/tsc -p tsconfig.json",
+    "typecheck": "node ../../node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
     "lint": "echo \"No lint config for @tonti/types\""
   },
   "devDependencies": {
     "@tonti/tsconfig": "workspace:*",
-    "typescript": "^5.9.2"
+    "typescript": "~6.0.3"
   }
 }

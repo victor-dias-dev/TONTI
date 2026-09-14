@@ -119,6 +119,17 @@ export function useCreateBudget() {
   });
 }
 
+export function useDeleteBudget() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => financeService.deleteBudget(id),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.planning });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.dashboard });
+    },
+  });
+}
+
 export function useCategoryTransactions(id: string) {
   return useQuery({
     queryKey: queryKeys.categoryTransactions(id),

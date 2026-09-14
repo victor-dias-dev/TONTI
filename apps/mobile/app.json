@@ -6,10 +6,8 @@
     "orientation": "portrait",
     "scheme": "tonti",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "backgroundColor": "#F8FAFA",
-      "resizeMode": "contain"
+    "experiments": {
+      "reactCompiler": true
     },
     "ios": {
       "supportsTablet": false,
@@ -25,9 +23,25 @@
       "adaptiveIcon": {
         "backgroundColor": "#00342B"
       },
-      "package": "app.tonti.mobile",
-      "usesCleartextTraffic": true
+      "package": "app.tonti.mobile"
     },
-    "plugins": ["expo-router", "expo-secure-store", "expo-splash-screen"]
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F8FAFA"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ]
   }
 }

@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import {
   AppHeader,
   AppText,
@@ -9,7 +10,7 @@ import {
   MoneyText,
   SettingsRow,
 } from '../../../components';
-import { useCategories, usePlanning } from '../../../hooks/use-finance';
+import { useCategories, useDeleteBudget, usePlanning } from '../../../hooks/use-finance';
 import { colors, useColors } from '../../../theme';
 import { findCategory } from '../../../utils/lookups';
 
@@ -17,12 +18,29 @@ export function PlanningScreen() {
   const colors = useColors();
   const planning = usePlanning();
   const categories = useCategories();
+  const remove = useDeleteBudget();
+  const [openId, setOpenId] = useState<string | null>(null);
   const data = planning.data;
+
+  function confirmDelete(id: string, name?: string) {
+    Alert.alert('Apagar planejamento', `Remover ${name ?? 'este item'} deste mês?`, [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Apagar',
+        style: 'destructive',
+        onPress: () => remove.mutate(id),
+      },
+    ]);
+  }
 
   return (
     <View style={styles.safe}>
       <AppHeader />
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={!openId}
+      >
         <AppText variant="titleLg" color={colors.primary}>
           Planejamento
         </AppText>
@@ -50,7 +68,21 @@ export function PlanningScreen() {
                   key={budget.id}
                   budget={budget}
                   category={findCategory(categories.data, budget.categoryId)}
-                  onPress={() => router.push(`/(app)/planning/${budget.categoryId}`)}
+                  open={openId === budget.id}
+                  onOpenChange={(next) => setOpenId(next ? budget.id : null)}
+                  onPress={() => {
+                    if (openId && openId !== budget.id) {
+                      setOpenId(null);
+                      return;
+                    }
+                    router.push(`/(app)/planning/${budget.categoryId}`);
+                  }}
+                  onDelete={() =>
+                    confirmDelete(
+                      budget.id,
+                      findCategory(categories.data, budget.categoryId)?.name,
+                    )
+                  }
                 />
               ))}
             </View>

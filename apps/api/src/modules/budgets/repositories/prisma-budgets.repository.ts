@@ -26,6 +26,15 @@ export class PrismaBudgetsRepository extends BudgetsRepository {
     });
   }
 
+  async findLatestMonthBefore(userId: string, month: Date): Promise<Date | null> {
+    const latest = await this.prisma.budget.findFirst({
+      where: { userId, month: { lt: month } },
+      orderBy: { month: 'desc' },
+      select: { month: true },
+    });
+    return latest?.month ?? null;
+  }
+
   create(data: {
     userId: string;
     categoryId: string;
@@ -33,6 +42,20 @@ export class PrismaBudgetsRepository extends BudgetsRepository {
     amount: Prisma.Decimal;
   }): Promise<Budget> {
     return this.prisma.budget.create({ data });
+  }
+
+  async createMany(
+    data: Array<{
+      userId: string;
+      categoryId: string;
+      month: Date;
+      amount: Prisma.Decimal;
+    }>,
+  ): Promise<void> {
+    if (data.length === 0) {
+      return;
+    }
+    await this.prisma.budget.createMany({ data, skipDuplicates: true });
   }
 
   update(id: string, data: { amount?: Prisma.Decimal }): Promise<Budget> {

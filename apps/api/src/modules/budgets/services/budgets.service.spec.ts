@@ -11,7 +11,12 @@ describe('BudgetsService', () => {
   const categoryId = 'dddddddd-dddd-dddd-dddd-dddddddddddd';
 
   let service: BudgetsService;
-  let budgets: { findByUserAndMonth: jest.Mock; findByIdAndUser: jest.Mock };
+  let budgets: {
+    findByUserAndMonth: jest.Mock;
+    findByIdAndUser: jest.Mock;
+    findLatestMonthBefore: jest.Mock;
+    createMany: jest.Mock;
+  };
   let transactions: { sumByType: jest.Mock; sumExpensesByCategory: jest.Mock };
 
   beforeEach(() => {
@@ -26,6 +31,8 @@ describe('BudgetsService', () => {
         },
       ]),
       findByIdAndUser: jest.fn(),
+      findLatestMonthBefore: jest.fn(),
+      createMany: jest.fn(),
     };
     transactions = {
       sumByType: jest
@@ -67,5 +74,48 @@ describe('BudgetsService', () => {
     const result = await service.summary(userId, '2026-08');
     expect(result.budgets[0].status).toBe('over');
     expect(result.budgets[0].percentLabel).toBe('110%');
+  });
+
+  it('renews last month plans with spent starting at zero', async () => {
+    const previous = [
+      {
+        id: 'budget-prev',
+        userId,
+        categoryId,
+        month: new Date('2026-08-01'),
+        amount: new Decimal('1700'),
+      },
+    ];
+    const renewed = [
+      {
+        id: 'budget-sep',
+        userId,
+        categoryId,
+        month: new Date('2026-09-01'),
+        amount: new Decimal('1700'),
+      },
+    ];
+    budgets.findByUserAndMonth
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce(previous)
+      .mockResolvedValueOnce(renewed);
+    budgets.findLatestMonthBefore.mockResolvedValue(new Date('2026-08-01'));
+    transactions.sumExpensesByCategory.mockResolvedValue([]);
+
+    const result = await service.summary(userId, '2026-09');
+
+    expect(budgets.createMany).toHaveBeenCalledWith([
+      expect.objectContaining({
+        userId,
+        categoryId,
+        month: new Date('2026-09-01'),
+        amount: new Decimal('1700'),
+      }),
+    ]);
+    expect(result.budgets[0]).toMatchObject({
+      plannedCents: '170000',
+      spentCents: '0',
+      percentLabel: '0%',
+    });
   });
 });

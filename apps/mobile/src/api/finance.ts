@@ -133,6 +133,10 @@ export const financeApi = {
     return post<PlanningSummary['budgets'][number]>('/budgets', payload);
   },
 
+  deleteBudget(id: string) {
+    return apiClient.delete(`/budgets/${id}`).then(() => undefined);
+  },
+
   getCategoryTransactions(categoryId: string) {
     return get<Transaction[]>('/transactions', { categoryId });
   },

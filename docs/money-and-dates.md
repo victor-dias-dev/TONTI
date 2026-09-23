@@ -1,6 +1,8 @@
 # Money and dates
 
-These rules apply to every future financial module.
+Tonti keeps money exact and time zoned. A balance must not drift by a fraction of a centavo, and a billing window must not follow the clock of the machine that happens to run the API.
+
+These rules apply to every financial module. The billing window itself is described in [billing-cycle.md](billing-cycle.md).
 
 ## Money
 

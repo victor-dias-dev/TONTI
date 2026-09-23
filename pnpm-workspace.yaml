@@ -5,6 +5,11 @@ packages:
 nodeLinker: hoisted
 strictPeerDependencies: false
 
+overrides:
+  deepmerge-ts: 8.0.2
+  image-size: 2.0.4
+  multer: 2.4.0
+
 allowBuilds:
   '@parcel/watcher': true
   '@prisma/client': true

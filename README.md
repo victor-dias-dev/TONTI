@@ -1,91 +1,66 @@
 # Tonti
 
-Aplicativo brasileiro de gestão financeira pessoal. Esta etapa contém apenas a foundation: monorepo, API NestJS, autenticação, mobile Expo e infraestrutura local.
+[Português](README.pt-BR.md)
+
+[![CI](https://github.com/victor-dias-dev/TONTI/actions/workflows/ci.yml/badge.svg)](https://github.com/victor-dias-dev/TONTI/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+Brazilian personal finance for one person: exact money, a billing cycle that is not always the calendar month, and records that belong to a single user.
+
+Amounts are `DECIMAL(19, 4)`. Timestamps are UTC. The API never returns another user's accounts, transactions, or budgets. The assistant is a calculated reading of the current financial month, not a language model.
+
+![Categories](docs/screenshots/categories.png)
+![Profile](docs/screenshots/profile.png)
+![Preferences](docs/screenshots/preferences.png)
+
+## What is in the app
+
+- Auth, profile, and preferences (theme, hidden balances, currency, billing-cycle start)
+- Accounts, categories, transactions, and installments
+- Credit cards, budgets, and subscriptions
+- Dashboard
+- Assistant insights for the open financial month
 
 ## Requirements
 
 - Node.js 22+
 - pnpm 9+
-- Docker
-- Docker Compose
+- Docker and Docker Compose
 
-## Installation
+## Quick start
 
 ```bash
 pnpm install
-```
-
-Suba PostgreSQL e Redis:
-
-```bash
 docker compose up -d
-```
-
-Gere o client do Prisma e aplique as migrations:
-
-```bash
+cp apps/api/.env.example apps/api/.env
+cp apps/mobile/.env.example apps/mobile/.env
 pnpm db:generate
 pnpm db:migrate:deploy
-```
-
-Opcional — usuário de desenvolvimento (`demo@tonti.app` / `Demo1234!`):
-
-```bash
 pnpm db:seed
-```
-
-## Environment
-
-Copie `apps/api/.env.example` para `apps/api/.env`. Variáveis obrigatórias:
-
-| Variável         | Descrição                                   |
-| ---------------- | ------------------------------------------- |
-| `NODE_ENV`       | `development`, `test` ou `production`       |
-| `PORT`           | Porta HTTP da API                           |
-| `DATABASE_URL`   | Conexão PostgreSQL                          |
-| `REDIS_URL`      | Conexão Redis                               |
-| `JWT_SECRET`     | Segredo JWT (mínimo 32 caracteres)          |
-| `JWT_EXPIRES_IN` | Expiração do token (`7d`, `1h`, ...)        |
-| `CORS_ORIGIN`    | Origens permitidas (`*` em desenvolvimento) |
-
-A API valida essas variáveis na inicialização e recusa subir se alguma obrigatória estiver ausente.
-
-No mobile, copie `apps/mobile/.env.example` para `apps/mobile/.env` e ajuste `EXPO_PUBLIC_API_URL` se necessário.
-
-## Database
-
-Prisma vive em `apps/api/prisma`.
-
-- Schema: `apps/api/prisma/schema.prisma`
-- Migrations: `apps/api/prisma/migrations`
-- Seed: `apps/api/prisma/seed.ts`
-
-Comandos:
-
-```bash
-pnpm db:migrate          # cria/aplica migration em desenvolvimento
-pnpm db:migrate:deploy    # aplica migrations existentes
-pnpm db:studio            # Prisma Studio
-```
-
-IDs são UUID. Timestamps são UTC (`TIMESTAMPTZ`). Valores financeiros usam `DECIMAL(19, 4)` — ver `docs/money-and-dates.md`. Tabelas e relacionamentos: `docs/database.md`.
-
-## Development
-
-```bash
 pnpm dev
 ```
 
-Isso sobe a API (NestJS watch) e o Metro do Expo.
+The seed user is `demo@tonti.app` / `Demo1234!`.
 
-Separado:
+`pnpm dev` starts the NestJS API and the Expo Metro bundler. Separately: `pnpm dev:api` and `pnpm dev:mobile`.
 
-```bash
-pnpm dev:api
-pnpm dev:mobile
-```
+API prefix: `/api/v1`. Health: `GET /health`. Swagger in development: http://localhost:3000/api/docs
 
-## Testing
+The API refuses to boot when a required variable is missing. Copy the examples and keep real secrets out of git.
+
+| Variable         | Purpose                                |
+| ---------------- | -------------------------------------- |
+| `NODE_ENV`       | `development`, `test`, or `production` |
+| `PORT`           | HTTP port                              |
+| `DATABASE_URL`   | PostgreSQL                             |
+| `REDIS_URL`      | Redis                                  |
+| `JWT_SECRET`     | JWT secret, at least 32 characters     |
+| `JWT_EXPIRES_IN` | Access token lifetime (`7d`, `1h`)     |
+| `CORS_ORIGIN`    | Allowed origins (`*` in development)   |
+
+On mobile, set `EXPO_PUBLIC_API_URL` in `apps/mobile/.env` when the API is not on `http://localhost:3000/api/v1`.
+
+## Checks
 
 ```bash
 pnpm test
@@ -95,41 +70,23 @@ pnpm typecheck
 pnpm build
 ```
 
-Os testes e2e da API exigem PostgreSQL e Redis (via `docker compose up -d`) e o banco `tonti_test`.
+End-to-end tests need PostgreSQL, Redis, and the `tonti_test` database.
 
-## Architecture
-
-Monorepo Turborepo + pnpm:
+## Repository
 
 ```text
-apps/api          NestJS REST API (`/api/v1`)
+apps/api          NestJS REST API
 apps/mobile       Expo / React Native
-packages/types    Contratos TypeScript compartilhados
-packages/config   Locale, moeda e constantes monetárias
-packages/tsconfig TypeScript compartilhado
+packages/types    Shared TypeScript contracts
+packages/config   Locale, currency, and money constants
+packages/tsconfig
 packages/eslint-config
 ```
 
-Detalhes em `docs/architecture.md`. Isolamento de dados: todo dado financeiro pertence a um usuário e nunca pode ser acessado por outro. Schema das tabelas: `docs/database.md`. Design system do mobile: `docs/design-system.md`.
+Money and time rules: [docs/money-and-dates.md](docs/money-and-dates.md). Billing cycle: [docs/billing-cycle.md](docs/billing-cycle.md). Modules and boundaries: [docs/architecture.md](docs/architecture.md). Schema: [docs/database.md](docs/database.md). Mobile UI: [docs/design-system.md](docs/design-system.md).
 
-Mobile:
+## Contributing
 
-```text
-UI → Hooks → State / Query → API Client → Backend
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md). Security reports go through [private vulnerability reporting](https://github.com/victor-dias-dev/TONTI/security/advisories/new), described in [SECURITY.md](SECURITY.md).
 
-Zustand guarda sessão. TanStack Query guarda estado do servidor. JWT fica no `expo-secure-store`.
-
-## API
-
-- Prefixo: `/api/v1`
-- Health: `GET /health`
-- Swagger (desenvolvimento): [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
-
-Auth:
-
-```text
-POST /api/v1/auth/register
-POST /api/v1/auth/login
-GET  /api/v1/auth/me
-```
+Licensed under the [MIT License](LICENSE).

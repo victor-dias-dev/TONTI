@@ -11,7 +11,8 @@
     "web": "node ../../node_modules/expo/bin/cli start --web",
     "lint": "node ../../node_modules/expo/bin/cli lint",
     "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit",
-    "build": "node ../../node_modules/typescript/bin/tsc --noEmit"
+    "build": "node ../../node_modules/typescript/bin/tsc --noEmit",
+    "test": "node ../../node_modules/jest/bin/jest.js --config jest.config.js"
   },
   "dependencies": {
     "@expo-google-fonts/hanken-grotesk": "^0.4.3",
